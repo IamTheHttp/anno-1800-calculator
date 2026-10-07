@@ -4,7 +4,7 @@ import { RegionBadge } from './components/common';
 import { usePref } from './components/usePref';
 import { EmpireView } from './components/EmpireView';
 import { IslandView } from './components/IslandView';
-import { empireBalance, islandBalance, shortages, type Shortage } from './model/calc';
+import { analyze, shortages, type Shortage } from './model/calc';
 import { game } from './model/gameData';
 import { loadSaved, newIsland, parseExportFile, reducer, REVENUES, save, toExportFile, type Revenue } from './model/state';
 
@@ -24,10 +24,10 @@ export default function App() {
 
   useEffect(() => save(state), [state]);
 
-  const empire = useMemo(() => empireBalance(state.islands, state.settings), [state.islands, state.settings]);
+  const analysis = useMemo(() => analyze(state.islands, state.settings), [state.islands, state.settings]);
   const islandShortages = useMemo(
-    () => new Map(state.islands.map((i) => [i.id, [...shortages(islandBalance(i, state.settings), empire).values()]])),
-    [state.islands, state.settings, empire],
+    () => new Map(state.islands.map((i) => [i.id, [...shortages(analysis.byIsland.get(i.id) ?? [], analysis.empire).values()]])),
+    [state.islands, analysis],
   );
 
   const island = view.kind === 'island' ? state.islands.find((i) => i.id === view.id) : undefined;
@@ -157,10 +157,10 @@ export default function App() {
         </nav>
         <main>
           {current.kind === 'empire' && (
-            <EmpireView islands={state.islands} settings={state.settings} empire={empire} onOpenIsland={(id) => setView({ kind: 'island', id })} />
+            <EmpireView islands={state.islands} settings={state.settings} analysis={analysis} onOpenIsland={(id) => setView({ kind: 'island', id })} />
           )}
           {current.kind === 'chains' && <ChainView />}
-          {current.kind === 'island' && island && <IslandView island={island} settings={state.settings} empire={empire} dispatch={dispatch} />}
+          {current.kind === 'island' && island && <IslandView island={island} settings={state.settings} analysis={analysis} dispatch={dispatch} />}
         </main>
       </div>
     </div>

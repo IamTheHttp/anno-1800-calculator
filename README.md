@@ -10,6 +10,9 @@ Working conditions, items, electricity, and trade unions are not modelled.
   tier, and a count per production building.
 - **Balance** (building-driven) — per good: tons/min produced vs. used by
   residents and by factories, with the net shown in tons and in buildings.
+  Factories draw inputs only as fast as their output is needed, so an
+  overbuilt chain (e.g. extra breweries) does not show its inputs as missing.
+  Building rows show "Runs at N%" when demand keeps them below capacity.
 - **Needs plan** (population-driven) — every building the residents' needs call
   for, through the full chain, vs. what is built. Goods from the other region
   (e.g. coffee for engineers) carry a region badge.
@@ -59,6 +62,10 @@ Delete `.data-src/` first to pull the latest upstream data.
 - A building makes `tpmin × output amount` tons per minute.
 - A tier consumes `residents × tpmin` tons per minute of each active need.
 - One resident provides one worker of its tier.
+- A factory runs at `min(1, needed / capacity)` of its output, empire-wide.
+  "Needed" is resident demand plus the inputs of factories that are
+  themselves needed. Goods no resident or factory uses (bricks, steel beams,
+  weapons, …) run at full capacity.
 - Each met need pays `MoneyValue / 10` coins per minute per full house, scaled
   by occupancy, times `1 + Revenue bonus` (Plenty 25%, Medium 12.5%, Spare 0%).
 - Upkeep is each production building's coin maintenance. Public buildings,

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  analyze,
   collectBuildings,
   empireShortGoods,
   islandIncome,
@@ -33,6 +34,13 @@ const RUM_DISTILLERY = 1010340;
 const NW_LUMBERJACK = 101260;
 const OW_LUMBERJACK = 1010266;
 const SUGAR_CANE = 1010329;
+const BREWERY = 1010292;
+const MALTHOUSE = 1010314;
+const HOP_FARM = 1010264;
+const SAWMILL = 100451;
+const BEER = 1010214;
+const GRAIN = 1010192;
+const HOPS = 1010194;
 
 const unlocks: Settings = { applyUnlocks: true, revenue: 'spare' };
 const noUnlocks: Settings = { applyUnlocks: false, revenue: 'spare' };
@@ -61,7 +69,7 @@ describe('residentDemand', () => {
 });
 
 describe('islandBalance', () => {
-  it('nets production against residents and factory inputs', () => {
+  it('nets production against residents and the inputs factories need', () => {
     const i = island({
       residents: { [FARMERS]: 400 },
       buildings: { [FISHERY]: 1, [SCHNAPPS_DISTILLERY]: 1, [POTATO_FARM]: 1 },
@@ -71,10 +79,43 @@ describe('islandBalance', () => {
     expect(fish.produced).toBe(2);
     expect(fish.residents).toBeCloseTo(1, 3);
     expect(fish.net).toBeCloseTo(1, 3);
+    // 400 farmers drink 1.33 t/min of schnapps, so the distillery runs at 2/3
+    // and draws 1.33 t/min of potatoes, not its full 2.
     const potatoes = byProduct(bal, 1010195)!;
     expect(potatoes.produced).toBe(2);
-    expect(potatoes.factories).toBe(2);
-    expect(potatoes.net).toBe(0);
+    expect(potatoes.factories).toBeCloseTo(4 / 3, 3);
+    expect(potatoes.net).toBeCloseTo(2 / 3, 3);
+  });
+
+  it('does not flag inputs of an overbuilt chain', () => {
+    // 1000 workers drink ~0.77 t/min of beer; 3 breweries could make 3.
+    const i = island({
+      residents: { [WORKERS]: 1000 },
+      buildings: { [BREWERY]: 3, [MALTHOUSE]: 2, [HOP_FARM]: 2, [GRAIN_FARM]: 1 },
+    });
+    const bal = islandBalance(i, unlocks);
+    expect(byProduct(bal, BEER)!.net).toBeGreaterThan(0);
+    expect(byProduct(bal, GRAIN)!.net).toBeGreaterThan(0);
+    expect(byProduct(bal, HOPS)!.net).toBeGreaterThan(0);
+  });
+
+  it('flags inputs when the output is actually needed', () => {
+    const i = island({ residents: { [WORKERS]: 4000 }, buildings: { [BREWERY]: 3, [MALTHOUSE]: 2, [HOP_FARM]: 5, [GRAIN_FARM]: 1 } });
+    expect(byProduct(islandBalance(i, unlocks), GRAIN)!.net).toBeLessThan(0);
+  });
+
+  it('runs goods nobody consumes at full capacity', () => {
+    const i = island({ buildings: { [SAWMILL]: 1, [OW_LUMBERJACK]: 1 } });
+    expect(byProduct(islandBalance(i, unlocks), 120008)!.factories).toBe(4);
+  });
+
+  it('runs exporting factories for demand on other islands', () => {
+    const a = island({ residents: { [WORKERS]: 4000 } });
+    const b = island({ buildings: { [BREWERY]: 3, [MALTHOUSE]: 2, [HOP_FARM]: 5, [GRAIN_FARM]: 1 } });
+    const { byIsland } = analyze([a, b], unlocks);
+    expect(byProduct(byIsland.get(b.id)!, GRAIN)!.net).toBeLessThan(0);
+    // On its own, island B has no beer demand and needs no grain.
+    expect(byProduct(islandBalance(b, unlocks), GRAIN)!.net).toBeGreaterThan(0);
   });
 
   it('empire balance sums islands', () => {

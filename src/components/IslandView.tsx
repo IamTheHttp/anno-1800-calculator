@@ -3,14 +3,15 @@ import {
   ceilWhole,
   empireShortGoods,
   housesFor,
-  islandBalance,
   islandIncome,
   requiredBuildings,
   residentDemand,
   shortages,
   workforceBalance,
+  type Analysis,
   type ProductBalance,
   type Shortage,
+  type Utilization,
 } from '../model/calc';
 import {
   FACTORY_GROUPS,
@@ -40,6 +41,7 @@ interface Marks {
   missing: Map<Id, number>;
   /** Workers short, per population level. */
   workersShort: Map<Id, number>;
+  utilization: Utilization;
 }
 
 const SHORTAGE_TEXT: Record<Shortage, string> = {
@@ -50,16 +52,17 @@ const SHORTAGE_TEXT: Record<Shortage, string> = {
 export function IslandView({
   island,
   settings,
-  empire,
+  analysis,
   dispatch,
 }: {
   island: Island;
   settings: Settings;
-  empire: ProductBalance[];
+  analysis: Analysis;
   dispatch: Dispatch<Action>;
 }) {
   const [tab, setTab] = usePref<Tab>('islandTab', 'setup');
-  const balance = useMemo(() => islandBalance(island, settings), [island, settings]);
+  const empire = analysis.empire;
+  const balance = useMemo(() => analysis.byIsland.get(island.id) ?? [], [analysis, island.id]);
   const plan = useMemo(() => requiredBuildings(island, settings), [island, settings]);
   const workforce = useMemo(() => workforceBalance(island), [island]);
   const income = useMemo(() => islandIncome(island, settings, empireShortGoods(empire)), [island, settings, empire]);
@@ -74,8 +77,9 @@ export function IslandView({
       net: new Map(balance.map((b) => [b.product, b.net])),
       missing: new Map(plan.filter((p) => p.missing > 0).map((p) => [p.factory.id, p.missing])),
       workersShort,
+      utilization: analysis.utilization,
     };
-  }, [balance, empire, plan, workforce]);
+  }, [balance, empire, plan, workforce, analysis.utilization]);
 
   const deficits = marks.shortage.size;
   const toBuild = plan.filter((p) => p.missing > 0).reduce((s, p) => s + p.missing, 0);
@@ -404,6 +408,8 @@ function BuildingRow({ f, count, marks, onChange }: { f: Factory; count: number;
   const missing = marks.missing.get(f.id);
   const outShort = marks.shortage.get(out.product);
   const shortInputs = count > 0 ? f.inputs.filter((i) => marks.shortage.has(i.product)) : [];
+  const run = marks.utilization.get(out.product) ?? 0;
+  const idle = count > 0 && run < 0.995;
   const tone = missing || outShort === 'short' ? 'short' : outShort === 'import' || shortInputs.length ? 'import' : '';
   return (
     <div className={`building-row ${count > 0 ? 'built' : ''} ${tone ? `attention-${tone}` : ''}`}>
@@ -419,7 +425,7 @@ function BuildingRow({ f, count, marks, onChange }: { f: Factory; count: number;
             </>
           )}
         </span>
-        {(missing || outShort || shortInputs.length > 0) && (
+        {(missing || outShort || shortInputs.length > 0 || idle) && (
           <span className="flags">
             {missing !== undefined && (
               <span className="flag flag-short" title="Residents' needs call for more of this building">
@@ -429,6 +435,11 @@ function BuildingRow({ f, count, marks, onChange }: { f: Factory; count: number;
             {outShort && (
               <span className={`flag flag-${outShort}`} title={SHORTAGE_TEXT[outShort]}>
                 {productById.get(out.product)?.name} {fmt(marks.net.get(out.product) ?? 0)} t/min
+              </span>
+            )}
+            {idle && (
+              <span className="flag flag-idle" title="Demand across the empire keeps these buildings below full capacity">
+                Runs at {fmt(run * 100, 0)}%
               </span>
             )}
             {shortInputs.length > 0 && (

@@ -2,12 +2,11 @@ import { useMemo } from 'react';
 import {
   empireRequiredBuildings,
   empireShortGoods,
-  islandBalance,
   islandIncome,
   shortages,
   workforceBalance,
+  type Analysis,
   type Income,
-  type ProductBalance,
 } from '../model/calc';
 import { game, levelById } from '../model/gameData';
 import type { Island, Settings } from '../model/state';
@@ -21,14 +20,15 @@ type Tab = 'next' | 'balance' | 'plan' | 'income';
 export function EmpireView({
   islands,
   settings,
-  empire: balance,
+  analysis,
   onOpenIsland,
 }: {
   islands: Island[];
   settings: Settings;
-  empire: ProductBalance[];
+  analysis: Analysis;
   onOpenIsland: (id: string) => void;
 }) {
+  const balance = analysis.empire;
   const [tab, setTab] = usePref<Tab>('empireTab', 'next');
   const short = useMemo(() => empireShortGoods(balance), [balance]);
   const incomes = useMemo(() => islands.map((i) => islandIncome(i, settings, short)), [islands, settings, short]);
@@ -40,7 +40,7 @@ export function EmpireView({
       <p className="lede">
         All islands together, as if every surplus could reach every deficit. Trade routes are not modelled yet.
       </p>
-      <IslandSummary islands={islands} settings={settings} empire={balance} incomes={incomes} onOpenIsland={onOpenIsland} />
+      <IslandSummary islands={islands} analysis={analysis} incomes={incomes} onOpenIsland={onOpenIsland} />
       <Tabs<Tab>
         active={tab}
         onChange={setTab}
@@ -61,14 +61,12 @@ export function EmpireView({
 
 function IslandSummary({
   islands,
-  settings,
-  empire,
+  analysis,
   incomes,
   onOpenIsland,
 }: {
   islands: Island[];
-  settings: Settings;
-  empire: ProductBalance[];
+  analysis: Analysis;
   incomes: Income[];
   onOpenIsland: (id: string) => void;
 }) {
@@ -89,7 +87,7 @@ function IslandSummary({
         </thead>
         <tbody>
           {islands.map((i, idx) => {
-            const s = [...shortages(islandBalance(i, settings), empire).values()];
+            const s = [...shortages(analysis.byIsland.get(i.id) ?? [], analysis.empire).values()];
             const shortCount = s.filter((x) => x === 'short').length;
             const importCount = s.length - shortCount;
             const net = incomes[idx].net;

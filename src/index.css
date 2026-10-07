@@ -880,3 +880,8 @@ tr.total td {
 .dot-import {
   background: var(--warn);
 }
+
+.flag-idle {
+  color: var(--muted);
+  background: var(--surface-2);
+}

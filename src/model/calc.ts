@@ -1,5 +1,7 @@
 import {
+  consumerGoods,
   factoryById,
+  intermediateGoods,
   game,
   levelById,
   outputRate,
@@ -45,15 +47,81 @@ export interface ProductBalance {
   net: number;
 }
 
-/** Building-driven view: what the island's buildings make vs. what it uses up. */
-export function islandBalance(island: Island, settings: Settings): ProductBalance[] {
+/** Share of capacity (0–1) each good's producers actually run at. */
+export type Utilization = Map<Id, number>;
+
+/**
+ * How hard each good's producers run across `islands`. A factory runs only as
+ * fast as its output is needed — by residents, or by factories that are
+ * themselves needed — so overbuilt chains do not pull extra inputs. Goods no
+ * resident or factory uses (bricks, weapons, …) run at full capacity.
+ * Surplus anywhere is assumed to reach demand anywhere.
+ */
+export function utilization(islands: Island[], settings: Settings): Utilization {
+  const capacity: Rates = new Map();
+  const demand: Rates = new Map();
+  const built = new Map<Id, number>();
+  for (const island of islands) {
+    for (const [p, r] of residentDemand(island, settings)) add(demand, p, r);
+    for (const [fid, count] of Object.entries(island.buildings)) {
+      const f = factoryById.get(Number(fid));
+      if (!f || count <= 0) continue;
+      add(built, f.id, count);
+      for (const o of f.outputs) add(capacity, o.product, count * f.tpmin * o.amount);
+    }
+  }
+  const consumers = new Map<Id, { factory: Factory; count: number; amount: number }[]>();
+  for (const [fid, count] of built) {
+    const f = factoryById.get(fid)!;
+    for (const i of f.inputs) {
+      const list = consumers.get(i.product) ?? [];
+      list.push({ factory: f, count, amount: i.amount });
+      consumers.set(i.product, list);
+    }
+  }
+
+  const util: Utilization = new Map();
+  const visiting = new Set<Id>();
+  const utilOf = (product: Id): number => {
+    const known = util.get(product);
+    if (known !== undefined) return known;
+    const cap = capacity.get(product) ?? 0;
+    if (cap === 0) return 0;
+    if (!consumerGoods.has(product) && !intermediateGoods.has(product)) {
+      util.set(product, 1);
+      return 1;
+    }
+    // A cycle cannot occur in base-game chains; treat one as full demand.
+    if (visiting.has(product)) return 1;
+    visiting.add(product);
+    let required = demand.get(product) ?? 0;
+    for (const c of consumers.get(product) ?? []) {
+      required += c.count * c.factory.tpmin * c.amount * utilOf(c.factory.outputs[0].product);
+    }
+    visiting.delete(product);
+    const u = Math.min(1, required / cap);
+    util.set(product, u);
+    return u;
+  };
+  for (const product of capacity.keys()) utilOf(product);
+  return util;
+}
+
+/**
+ * Building-driven view: what the island's buildings make vs. what it uses up.
+ * Factories draw inputs at the rate `util` says they run (by default, the
+ * island on its own).
+ */
+export function islandBalance(island: Island, settings: Settings, util?: Utilization): ProductBalance[] {
+  const u = util ?? utilization([island], settings);
   const produced: Rates = new Map();
   const factoryUse: Rates = new Map();
   for (const [fid, count] of Object.entries(island.buildings)) {
     const f = factoryById.get(Number(fid));
     if (!f || count <= 0) continue;
+    const run = u.get(f.outputs[0].product) ?? 0;
     for (const o of f.outputs) add(produced, o.product, count * f.tpmin * o.amount);
-    for (const i of f.inputs) add(factoryUse, i.product, count * f.tpmin * i.amount);
+    for (const i of f.inputs) add(factoryUse, i.product, count * f.tpmin * i.amount * run);
   }
   return mergeBalance(produced, residentDemand(island, settings), factoryUse);
 }
@@ -68,20 +136,31 @@ function mergeBalance(produced: Rates, residents: Rates, factories: Rates): Prod
   });
 }
 
-/** Sums island balances, as if every island could ship to every other one. */
-export function empireBalance(islands: Island[], settings: Settings): ProductBalance[] {
+export interface Analysis {
+  utilization: Utilization;
+  empire: ProductBalance[];
+  byIsland: Map<string, ProductBalance[]>;
+}
+
+/** Island and empire balances, with factories running at empire-wide utilization. */
+export function analyze(islands: Island[], settings: Settings): Analysis {
+  const util = utilization(islands, settings);
+  const byIsland = new Map(islands.map((i) => [i.id, islandBalance(i, settings, util)]));
   const produced: Rates = new Map();
   const residents: Rates = new Map();
   const factories: Rates = new Map();
-  for (const island of islands) {
-    for (const b of islandBalance(island, settings)) {
+  for (const balance of byIsland.values()) {
+    for (const b of balance) {
       add(produced, b.product, b.produced);
       add(residents, b.product, b.residents);
       add(factories, b.product, b.factories);
     }
   }
-  return mergeBalance(produced, residents, factories);
+  return { utilization: util, empire: mergeBalance(produced, residents, factories), byIsland };
 }
+
+/** Sums island balances, as if every island could ship to every other one. */
+export const empireBalance = (islands: Island[], settings: Settings) => analyze(islands, settings).empire;
 
 export interface ChainNode {
   product: Id;
