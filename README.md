@@ -1,0 +1,85 @@
+# Anno 1800 Planner
+
+A static web tool for planning Anno 1800 islands: residents, production
+buildings, supply chains, and workforce. Base game only (no DLC content).
+Working conditions, items, electricity, and trade unions are not modelled.
+
+## What it does
+
+- **Islands** — each island has a region (Old World / New World), residents per
+  tier, and a count per production building.
+- **Balance** (building-driven) — per good: tons/min produced vs. used by
+  residents and by factories, with the net shown in tons and in buildings.
+- **Needs plan** (population-driven) — every building the residents' needs call
+  for, through the full chain, vs. what is built. Goods from the other region
+  (e.g. coffee for engineers) carry a region badge.
+- **Workforce** — workers the buildings need vs. residents of each tier.
+- **Empire overview** — all islands summed, plus a "what to build next" list.
+  It assumes any surplus can reach any deficit.
+- **Supply chains** — the full tree behind N buildings of any good.
+- **Need unlocks** — needs appear only once an island reaches the game's
+  resident threshold (toggle in the top bar). Bonus needs (e.g. rum for
+  workers) count only when ticked on the island.
+- **Import / export** — the whole plan as a versioned JSON file. The plan also
+  autosaves to the browser's local storage.
+
+## Develop
+
+```
+npm install
+npm run dev        # http://localhost:5173
+npm test           # unit tests (model + render smoke tests)
+npm run lint
+npm run build      # static site in dist/
+```
+
+The project-level `.npmrc` pins the public npm registry.
+
+## Game data
+
+`src/data/game-data.json` and `src/data/icons.json` are generated from the
+Anno1800Calculator data file (see `THIRD_PARTY_NOTICES.md`):
+
+```
+npm run data       # downloads params.js into .data-src/ if missing, then extracts
+```
+
+Delete `.data-src/` first to pull the latest upstream data.
+
+## Rates
+
+- A building makes `tpmin × output amount` tons per minute.
+- A tier consumes `residents × tpmin` tons per minute of each active need.
+- One resident provides one worker of its tier.
+
+## Deploy
+
+`.github/workflows/deploy.yml` builds and publishes `dist/` to GitHub Pages on
+every push to `main`. Enable it under *Settings → Pages → Source: GitHub
+Actions*. Pages on a private repository needs a paid GitHub plan.
+
+## Export format
+
+```json
+{
+  "app": "anno1800-planner",
+  "version": 1,
+  "exportedAt": "2026-10-07T12:00:00.000Z",
+  "settings": { "applyUnlocks": true },
+  "islands": [
+    {
+      "id": "k3j9x0aa",
+      "name": "Crown Falls",
+      "region": 5000000,
+      "residents": { "15000000": 500 },
+      "buildings": { "1010278": 2 },
+      "bonusNeeds": [],
+      "notes": ""
+    }
+  ]
+}
+```
+
+Keys of `residents` and `buildings` are game ids (population levels and
+buildings, see `src/data/game-data.json`). Unknown ids are dropped on import
+with a warning.

@@ -1,0 +1,3258 @@
+{
+ "regions": [
+  {
+   "id": 5000000,
+   "name": "The Old World",
+   "icon": "data/ui/2kimages/main/icons/icon_session_moderate.png"
+  },
+  {
+   "id": 5000001,
+   "name": "The New World",
+   "icon": "data/ui/2kimages/main/icons/icon_session_southamerica.png"
+  }
+ ],
+ "sessions": [
+  {
+   "id": 180023,
+   "name": "The Old World",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/icons/icon_session_moderate_white.png"
+  },
+  {
+   "id": 180025,
+   "name": "The New World",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/icons/icon_session_southamerica_white.png"
+  }
+ ],
+ "workforce": [
+  {
+   "id": 1010052,
+   "name": "Farmer Workforce",
+   "icon": "data/ui/2kimages/main/icons/workforce/icon_workforce_2.5d_farmer.png",
+   "populationLevel": 15000000
+  },
+  {
+   "id": 1010115,
+   "name": "Worker Workforce",
+   "icon": "data/ui/2kimages/main/icons/workforce/icon_workforce_2.5d_worker.png",
+   "populationLevel": 15000001
+  },
+  {
+   "id": 1010116,
+   "name": "Artisan Workforce",
+   "icon": "data/ui/2kimages/main/icons/workforce/icon_workforce_2.5d_artisan.png",
+   "populationLevel": 15000002
+  },
+  {
+   "id": 1010117,
+   "name": "Engineer Workforce",
+   "icon": "data/ui/2kimages/main/icons/workforce/icon_workforce_2.5d_engineer.png",
+   "populationLevel": 15000003
+  },
+  {
+   "id": 1010128,
+   "name": "Investor Workforce",
+   "icon": "data/ui/2kimages/main/icons/workforce/icon_workforce_2.5d_investor.png",
+   "populationLevel": 15000004
+  },
+  {
+   "id": 1010366,
+   "name": "Jornalero Workforce",
+   "icon": "data/ui/2kimages/main/icons/workforce/icon_workforce_2.5d_jornalero.png",
+   "populationLevel": 15000005
+  },
+  {
+   "id": 1010367,
+   "name": "Obrero Workforce",
+   "icon": "data/ui/2kimages/main/icons/workforce/icon_workforce_2.5d_obrero.png",
+   "populationLevel": 15000006
+  }
+ ],
+ "populationLevels": [
+  {
+   "id": 15000000,
+   "name": "Farmers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/resident/icon_resident_farmer.png",
+   "fullHouse": 10,
+   "needs": [
+    {
+     "product": 120020,
+     "tpmin": null,
+     "residents": 5,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010200,
+     "tpmin": 0.0025000002,
+     "residents": 3,
+     "unlockAt": 50,
+     "bonus": false
+    },
+    {
+     "product": 1010216,
+     "tpmin": 0.003333336,
+     "residents": 0,
+     "unlockAt": 100,
+     "bonus": false
+    },
+    {
+     "product": 1010237,
+     "tpmin": 0.003076926,
+     "residents": 2,
+     "unlockAt": 100,
+     "bonus": false
+    },
+    {
+     "product": 1010349,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": 150,
+     "bonus": false
+    },
+    {
+     "product": 1010235,
+     "tpmin": 0.0024000000000000002,
+     "residents": 1,
+     "unlockAt": null,
+     "bonus": true
+    },
+    {
+     "product": 1010239,
+     "tpmin": 0.0012000000000000001,
+     "residents": 1,
+     "unlockAt": null,
+     "bonus": true
+    },
+    {
+     "product": 1010203,
+     "tpmin": 0.00034999998,
+     "residents": 1,
+     "unlockAt": null,
+     "bonus": true
+    }
+   ]
+  },
+  {
+   "id": 15000001,
+   "name": "Workers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/resident/icon_resident_worker.png",
+   "fullHouse": 20,
+   "needs": [
+    {
+     "product": 120020,
+     "tpmin": null,
+     "residents": 5,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010200,
+     "tpmin": 0.0025000002,
+     "residents": 3,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010216,
+     "tpmin": 0.003333336,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010237,
+     "tpmin": 0.003076926,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010349,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010238,
+     "tpmin": 0.001000002,
+     "residents": 3,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010213,
+     "tpmin": 0.0009090899999999999,
+     "residents": 3,
+     "unlockAt": 150,
+     "bonus": false
+    },
+    {
+     "product": 1010350,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": 150,
+     "bonus": false
+    },
+    {
+     "product": 1010203,
+     "tpmin": 0.000416667,
+     "residents": 2,
+     "unlockAt": 300,
+     "bonus": false
+    },
+    {
+     "product": 1010214,
+     "tpmin": 0.00076923,
+     "residents": 0,
+     "unlockAt": 500,
+     "bonus": false
+    },
+    {
+     "product": 1010351,
+     "tpmin": null,
+     "residents": 2,
+     "unlockAt": 750,
+     "bonus": false
+    },
+    {
+     "product": 1010257,
+     "tpmin": 0.0009999999,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": true
+    },
+    {
+     "product": 1010245,
+     "tpmin": 0.00039999990000000004,
+     "residents": 4,
+     "unlockAt": null,
+     "bonus": true
+    },
+    {
+     "product": 1010193,
+     "tpmin": 0.0006249999,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": true
+    }
+   ]
+  },
+  {
+   "id": 15000002,
+   "name": "Artisans",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/resident/icon_resident_artisan.png",
+   "fullHouse": 30,
+   "needs": [
+    {
+     "product": 1010238,
+     "tpmin": 0.001333334,
+     "residents": 6,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010213,
+     "tpmin": 0.001212122,
+     "residents": 6,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010350,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010203,
+     "tpmin": 0.000555556,
+     "residents": 4,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010214,
+     "tpmin": 0.001025642,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010351,
+     "tpmin": null,
+     "residents": 4,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010217,
+     "tpmin": 0.00034188,
+     "residents": 4,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010206,
+     "tpmin": 0.00095238,
+     "residents": 2,
+     "unlockAt": 250,
+     "bonus": false
+    },
+    {
+     "product": 1010352,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": 250,
+     "bonus": false
+    },
+    {
+     "product": 1010257,
+     "tpmin": 0.001904762,
+     "residents": 0,
+     "unlockAt": 500,
+     "bonus": false
+    },
+    {
+     "product": 1010247,
+     "tpmin": 0.0008888879999999999,
+     "residents": 2,
+     "unlockAt": 900,
+     "bonus": false
+    },
+    {
+     "product": 1010353,
+     "tpmin": null,
+     "residents": 2,
+     "unlockAt": 1500,
+     "bonus": false
+    },
+    {
+     "product": 1010197,
+     "tpmin": 0.002,
+     "residents": 1,
+     "unlockAt": null,
+     "bonus": true
+    },
+    {
+     "product": 1010201,
+     "tpmin": 0.002666666,
+     "residents": 1,
+     "unlockAt": null,
+     "bonus": true
+    }
+   ]
+  },
+  {
+   "id": 15000003,
+   "name": "Engineers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/resident/icon_resident_engineer.png",
+   "fullHouse": 40,
+   "needs": [
+    {
+     "product": 1010217,
+     "tpmin": 0.00051282,
+     "residents": 12,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010206,
+     "tpmin": 0.0014285715,
+     "residents": 6,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010352,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010257,
+     "tpmin": 0.002857143,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010247,
+     "tpmin": 0.0013333335,
+     "residents": 6,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010353,
+     "tpmin": null,
+     "residents": 6,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120030,
+     "tpmin": 0.000222222,
+     "residents": 4,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010245,
+     "tpmin": 0.0006250005000000001,
+     "residents": 0,
+     "unlockAt": 500,
+     "bonus": false
+    },
+    {
+     "product": 120032,
+     "tpmin": 0.0011764710000000001,
+     "residents": 2,
+     "unlockAt": 1000,
+     "bonus": false
+    },
+    {
+     "product": 1010246,
+     "tpmin": 0.0001960785,
+     "residents": 0,
+     "unlockAt": 1000,
+     "bonus": false
+    },
+    {
+     "product": 1010354,
+     "tpmin": null,
+     "residents": 2,
+     "unlockAt": 1750,
+     "bonus": false
+    },
+    {
+     "product": 1010208,
+     "tpmin": 0.0003124995,
+     "residents": 2,
+     "unlockAt": 1750,
+     "bonus": false
+    },
+    {
+     "product": 1010356,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": 3000,
+     "bonus": false
+    },
+    {
+     "product": 1010203,
+     "tpmin": 0.0007812501,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": true
+    },
+    {
+     "product": 1010258,
+     "tpmin": 0.000375,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": true
+    }
+   ]
+  },
+  {
+   "id": 15000004,
+   "name": "Investors",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/resident/icon_resident_investor.png",
+   "fullHouse": 50,
+   "needs": [
+    {
+     "product": 120030,
+     "tpmin": 0.0003555552,
+     "residents": 16,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010245,
+     "tpmin": 0.0009999995999999999,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120032,
+     "tpmin": 0.0018823524,
+     "residents": 8,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010246,
+     "tpmin": 0.0003137256,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010354,
+     "tpmin": null,
+     "residents": 8,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010208,
+     "tpmin": 0.0005000004,
+     "residents": 8,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010356,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120016,
+     "tpmin": 0.0004704,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010259,
+     "tpmin": 0.000444444,
+     "residents": 2,
+     "unlockAt": 750,
+     "bonus": false
+    },
+    {
+     "product": 1010355,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": 750,
+     "bonus": false
+    },
+    {
+     "product": 1010258,
+     "tpmin": 0.0010666668,
+     "residents": 2,
+     "unlockAt": 1750,
+     "bonus": false
+    },
+    {
+     "product": 1010250,
+     "tpmin": 0.00042105239999999997,
+     "residents": 0,
+     "unlockAt": 1750,
+     "bonus": false
+    },
+    {
+     "product": 1010248,
+     "tpmin": 0.00010524,
+     "residents": 0,
+     "unlockAt": 3000,
+     "bonus": false
+    },
+    {
+     "product": 1010225,
+     "tpmin": 0.00013333319999999998,
+     "residents": 4,
+     "unlockAt": 5000,
+     "bonus": false
+    },
+    {
+     "product": 1010209,
+     "tpmin": 0.00032000004,
+     "residents": 3,
+     "unlockAt": null,
+     "bonus": true
+    }
+   ]
+  },
+  {
+   "id": 15000005,
+   "name": "Jornaleros",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/resident/icon_resident_jornalero.png",
+   "fullHouse": 10,
+   "needs": [
+    {
+     "product": 120020,
+     "tpmin": null,
+     "residents": 5,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120033,
+     "tpmin": 0.00285714,
+     "residents": 3,
+     "unlockAt": 50,
+     "bonus": false
+    },
+    {
+     "product": 1010257,
+     "tpmin": 0.00142857,
+     "residents": 0,
+     "unlockAt": 100,
+     "bonus": false
+    },
+    {
+     "product": 120043,
+     "tpmin": 0.0025000020000000003,
+     "residents": 2,
+     "unlockAt": 200,
+     "bonus": false
+    },
+    {
+     "product": 120050,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": 300,
+     "bonus": false
+    },
+    {
+     "product": 1010216,
+     "tpmin": 0.003333336,
+     "residents": 4,
+     "unlockAt": 300,
+     "bonus": false
+    },
+    {
+     "product": 1010237,
+     "tpmin": 0.0015,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": true
+    },
+    {
+     "product": 120044,
+     "tpmin": 0.00225,
+     "residents": 1,
+     "unlockAt": null,
+     "bonus": true
+    }
+   ]
+  },
+  {
+   "id": 15000006,
+   "name": "Obreros",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/resident/icon_resident_obrera.png",
+   "fullHouse": 20,
+   "needs": [
+    {
+     "product": 120020,
+     "tpmin": null,
+     "residents": 5,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120033,
+     "tpmin": 0.002857143,
+     "residents": 3,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 1010257,
+     "tpmin": 0.001428573,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120043,
+     "tpmin": 0.002499999,
+     "residents": 2,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120050,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120035,
+     "tpmin": 0.00142857,
+     "residents": 4,
+     "unlockAt": null,
+     "bonus": false
+    },
+    {
+     "product": 120032,
+     "tpmin": 0.0005882369999999999,
+     "residents": 2,
+     "unlockAt": 300,
+     "bonus": false
+    },
+    {
+     "product": 1010348,
+     "tpmin": null,
+     "residents": 0,
+     "unlockAt": 300,
+     "bonus": false
+    },
+    {
+     "product": 120037,
+     "tpmin": 0.001333332,
+     "residents": 2,
+     "unlockAt": 600,
+     "bonus": false
+    },
+    {
+     "product": 1010214,
+     "tpmin": 0.001333332,
+     "residents": 0,
+     "unlockAt": 600,
+     "bonus": false
+    },
+    {
+     "product": 1010259,
+     "tpmin": 0.000555555,
+     "residents": 0,
+     "unlockAt": 1000,
+     "bonus": false
+    },
+    {
+     "product": 1010206,
+     "tpmin": 0.0012500010000000002,
+     "residents": 2,
+     "unlockAt": 1000,
+     "bonus": false
+    },
+    {
+     "product": 120030,
+     "tpmin": 0.00039999990000000004,
+     "residents": 1,
+     "unlockAt": null,
+     "bonus": true
+    }
+   ]
+  }
+ ],
+ "factories": [
+  {
+   "id": 1010262,
+   "name": "Grain Farm",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_cereals_2.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010192,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 20
+   }
+  },
+  {
+   "id": 1010263,
+   "name": "Cattle Farm",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_meat_raw.png",
+   "tpmin": 0.5,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010193,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 20
+   }
+  },
+  {
+   "id": 1010264,
+   "name": "Hop Farm",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_hops.png",
+   "tpmin": 0.6666666666666667,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010194,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 20
+   }
+  },
+  {
+   "id": 1010265,
+   "name": "Potato Farm",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_potatoes.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010195,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 20
+   }
+  },
+  {
+   "id": 1010266,
+   "name": "Lumberjack's Hut",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_wood_log.png",
+   "tpmin": 4,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 5
+   }
+  },
+  {
+   "id": 1010267,
+   "name": "Sheep Farm",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_wool.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010197,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010269,
+   "name": "Pig Farm",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_pigs.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010199,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 30
+   }
+  },
+  {
+   "id": 1010558,
+   "name": "Hunting Cabin",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_fur.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010209,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 10
+   }
+  },
+  {
+   "id": 100654,
+   "name": "Red Pepper Farm",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_pepper.png",
+   "tpmin": 0.5,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010198,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 10
+   }
+  },
+  {
+   "id": 100655,
+   "name": "Vineyard",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_grapes.png",
+   "tpmin": 0.5,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120014,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010278,
+   "name": "Fishery",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_fish.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010200,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 25
+   }
+  },
+  {
+   "id": 1010310,
+   "name": "Saltpetre Works",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_niter.png",
+   "tpmin": 0.5,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010232,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 1010560,
+   "name": "Sand Mine",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_quartz_sand.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010228,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 1010280,
+   "name": "Concrete Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_reinforced_concrete.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010231,
+     "amount": 1
+    },
+    {
+     "product": 1010219,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010202,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 75
+   }
+  },
+  {
+   "id": 1010281,
+   "name": "Soap Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_soap_2.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010234,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010203,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010283,
+   "name": "Brick Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_bricks.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010201,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010205,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 100451,
+   "name": "Sawmill",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_wooden_planks.png",
+   "tpmin": 4,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010196,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010325,
+   "name": "Fur Dealer",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_fur_coats.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010209,
+     "amount": 1
+    },
+    {
+     "product": 1010240,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010247,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 200
+   }
+  },
+  {
+   "id": 1010286,
+   "name": "Light Bulb Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_light_bulb.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010241,
+     "amount": 1
+    },
+    {
+     "product": 1010243,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010208,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010285,
+   "name": "Window Makers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_glass_window_3.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    },
+    {
+     "product": 1010241,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010207,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010288,
+   "name": "Sailmakers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_sail.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010197,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010210,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 100416,
+   "name": "Clay Pit",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_clay.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010201,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010289,
+   "name": "Coachmakers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_chassis.png",
+   "tpmin": 0.5,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    },
+    {
+     "product": 1010255,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010211,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010291,
+   "name": "Bakery",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_bread.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010235,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010213,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010292,
+   "name": "Brewery",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_beer.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010194,
+     "amount": 1
+    },
+    {
+     "product": 1010236,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010214,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 75
+   }
+  },
+  {
+   "id": 1010293,
+   "name": "Artisanal Kitchen",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_goulash_01.png",
+   "tpmin": 0.5,
+   "inputs": [
+    {
+     "product": 1010193,
+     "amount": 1
+    },
+    {
+     "product": 1010198,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010215,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 75
+   }
+  },
+  {
+   "id": 1010295,
+   "name": "Cannery",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_canned_goulash.png",
+   "tpmin": 0.6666666666666667,
+   "inputs": [
+    {
+     "product": 1010227,
+     "amount": 1
+    },
+    {
+     "product": 1010215,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010217,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 75
+   }
+  },
+  {
+   "id": 1010294,
+   "name": "Schnapps Distillery",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_schnapps_4.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010195,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010216,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010316,
+   "name": "Slaughterhouse",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_meat_sausage.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010199,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010238,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 100659,
+   "name": "Champagne Cellar",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_champagne.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 120014,
+     "amount": 1
+    },
+    {
+     "product": 1010241,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120016,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010296,
+   "name": "Steelworks",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_beams.png",
+   "tpmin": 1.3333333333333335,
+   "inputs": [
+    {
+     "product": 1010219,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010218,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 200
+   }
+  },
+  {
+   "id": 1010297,
+   "name": "Furnace",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_steel.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010227,
+     "amount": 1
+    },
+    {
+     "product": 1010226,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010219,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010298,
+   "name": "Charcoal Kiln",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_coal_burn.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010226,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010299,
+   "name": "Weapon Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_weapons.png",
+   "tpmin": 0.6666666666666667,
+   "inputs": [
+    {
+     "product": 1010219,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010221,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010301,
+   "name": "Heavy Weapons Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_advanced_weaponry.png",
+   "tpmin": 0.5,
+   "inputs": [
+    {
+     "product": 1010219,
+     "amount": 1
+    },
+    {
+     "product": 1010222,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010223,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 250
+   }
+  },
+  {
+   "id": 1010302,
+   "name": "Motor Assembly Line",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_steam_machine.png",
+   "tpmin": 0.6666666666666667,
+   "inputs": [
+    {
+     "product": 1010219,
+     "amount": 1
+    },
+    {
+     "product": 1010204,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010224,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 250
+   }
+  },
+  {
+   "id": 1010303,
+   "name": "Cab Assembly Line",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_steam_carriage.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010211,
+     "amount": 1
+    },
+    {
+     "product": 1010224,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010225,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 500
+   }
+  },
+  {
+   "id": 1010282,
+   "name": "Brass Smeltery",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_brass.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010229,
+     "amount": 1
+    },
+    {
+     "product": 1010230,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010204,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 101331,
+   "name": "Oil Refinery",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_oil.png",
+   "tpmin": 4,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010566,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010304,
+   "name": "Coal Mine",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_coal_2.png",
+   "tpmin": 4,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010226,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010305,
+   "name": "Iron Mine",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_iron.png",
+   "tpmin": 4,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010227,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010307,
+   "name": "Zinc Mine",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_tin_ore.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010229,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 1010308,
+   "name": "Copper Mine",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_copper.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010230,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 1010309,
+   "name": "Limestone Quarry",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_cement.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010231,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 1010312,
+   "name": "Rendering Works",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_tallow.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010199,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010234,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 40
+   }
+  },
+  {
+   "id": 1010313,
+   "name": "Flour Mill",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_flour.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010192,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010235,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010314,
+   "name": "Malthouse",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_malt.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010192,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010236,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 25
+   }
+  },
+  {
+   "id": 1010315,
+   "name": "Framework Knitters",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_working_cloth.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010197,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010237,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010052,
+    "amount": 50
+   }
+  },
+  {
+   "id": 1010300,
+   "name": "Dynamite Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_dynamite.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010234,
+     "amount": 1
+    },
+    {
+     "product": 1010232,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010222,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 250
+   }
+  },
+  {
+   "id": 1010319,
+   "name": "Glassmakers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_glass.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010228,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010241,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010320,
+   "name": "Marquetry Workshop",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_inlay.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010242,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010321,
+   "name": "Filament Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_carbon_filament.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010226,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010243,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010323,
+   "name": "Bicycle Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_high_wheeler.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010219,
+     "amount": 1
+    },
+    {
+     "product": 1010255,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010245,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010324,
+   "name": "Clockmakers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_pocket_watch.png",
+   "tpmin": 0.6666666666666667,
+   "inputs": [
+    {
+     "product": 1010241,
+     "amount": 1
+    },
+    {
+     "product": 1010249,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010246,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010284,
+   "name": "Sewing Machine Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_sewing_machine.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    },
+    {
+     "product": 1010219,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010206,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010326,
+   "name": "Gramophone Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_phonographs.png",
+   "tpmin": 0.5,
+   "inputs": [
+    {
+     "product": 1010242,
+     "amount": 1
+    },
+    {
+     "product": 1010204,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010248,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 150
+   }
+  },
+  {
+   "id": 1010327,
+   "name": "Goldsmiths",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_gold.png",
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010226,
+     "amount": 1
+    },
+    {
+     "product": 1010233,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010249,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 125
+   }
+  },
+  {
+   "id": 1010328,
+   "name": "Jewellers",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_jewelry.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010256,
+     "amount": 1
+    },
+    {
+     "product": 1010249,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010250,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010116,
+    "amount": 150
+   }
+  },
+  {
+   "id": 101250,
+   "name": "Spectacle Factory",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_glasses.png",
+   "tpmin": 0.6666666666666667,
+   "inputs": [
+    {
+     "product": 1010241,
+     "amount": 1
+    },
+    {
+     "product": 1010204,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120030,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010117,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010329,
+   "name": "Sugar Cane Plantation",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_cane_sugar_1.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010251,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010330,
+   "name": "Tobacco Plantation",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_tobacco.png",
+   "tpmin": 0.5,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010252,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010331,
+   "name": "Cotton Plantation",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_cotton.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010253,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010332,
+   "name": "Cocoa Plantation",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_cocoa.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010254,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010333,
+   "name": "Caoutchouc Plantation",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_caoutchouc.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010255,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 101260,
+   "name": "Lumberjack's Hut",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 4,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 101251,
+   "name": "Coffee Plantation",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_coffee_beans.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120031,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 101263,
+   "name": "Plantain Plantation",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_banana.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120041,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 101269,
+   "name": "Cattle Farm",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_meat_raw.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010193,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 20
+   }
+  },
+  {
+   "id": 101270,
+   "name": "Corn Farm",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_corn.png",
+   "tpmin": 1,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120034,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 101272,
+   "name": "Alpaca Farm",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_alpaca_wool.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120036,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 1010339,
+   "name": "Pearl Farm",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_pearls.png",
+   "tpmin": 0.6666666666666667,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010256,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 50
+   }
+  },
+  {
+   "id": 101262,
+   "name": "Fish Oil Factory",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_fishoil.png",
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 120042,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 15
+   }
+  },
+  {
+   "id": 101261,
+   "name": "Sawmill",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 4,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010196,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 20
+   }
+  },
+  {
+   "id": 101265,
+   "name": "Sailmakers",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010240,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010210,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 20
+   }
+  },
+  {
+   "id": 1010318,
+   "name": "Cotton Mill",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_cotton_fur.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010253,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010240,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 101267,
+   "name": "Clay Pit",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010201,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 100
+   }
+  },
+  {
+   "id": 101268,
+   "name": "Brick Factory",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 1010201,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010205,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 50
+   }
+  },
+  {
+   "id": 101415,
+   "name": "Felt Producer",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_felt.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 120036,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120044,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 10
+   }
+  },
+  {
+   "id": 101273,
+   "name": "Bombín Weaver",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_bowler_hat.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010240,
+     "amount": 1
+    },
+    {
+     "product": 120044,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120037,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 20
+   }
+  },
+  {
+   "id": 1010340,
+   "name": "Rum Distillery",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_rum_barrel.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    },
+    {
+     "product": 1010251,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010257,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 30
+   }
+  },
+  {
+   "id": 1010341,
+   "name": "Chocolate Factory",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_chocolate.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010239,
+     "amount": 1
+    },
+    {
+     "product": 1010254,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010258,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 100
+   }
+  },
+  {
+   "id": 101252,
+   "name": "Coffee Roaster",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_coffe_cup.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 120031,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120032,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 150
+   }
+  },
+  {
+   "id": 101264,
+   "name": "Fried Plantain Kitchen",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_fried_bananas.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 120042,
+     "amount": 1
+    },
+    {
+     "product": 120041,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120033,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 25
+   }
+  },
+  {
+   "id": 101271,
+   "name": "Tortilla Maker",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_burrito.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010193,
+     "amount": 1
+    },
+    {
+     "product": 120034,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120035,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010561,
+   "name": "Oil Refinery",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 4,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010566,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 75
+   }
+  },
+  {
+   "id": 101311,
+   "name": "Gold Mine",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 0.4,
+   "inputs": [],
+   "outputs": [
+    {
+     "product": 1010233,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010317,
+   "name": "Sugar Refinery",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_salt.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010251,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010239,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 50
+   }
+  },
+  {
+   "id": 101266,
+   "name": "Poncho Darner",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_poncho.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 120036,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 120043,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010366,
+    "amount": 30
+   }
+  },
+  {
+   "id": 101296,
+   "name": "Marquetry Workshop",
+   "region": 5000001,
+   "icon": null,
+   "tpmin": 1,
+   "inputs": [
+    {
+     "product": 120008,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010242,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 100
+   }
+  },
+  {
+   "id": 1010342,
+   "name": "Cigar Factory",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_cigars.png",
+   "tpmin": 2,
+   "inputs": [
+    {
+     "product": 1010242,
+     "amount": 1
+    },
+    {
+     "product": 1010252,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 1010259,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 175
+   }
+  },
+  {
+   "id": 118571,
+   "name": "Fuel Station",
+   "region": 5000000,
+   "icon": "data/ui/2kimages/main/3dicons/icon_gasoline.png",
+   "tpmin": 4,
+   "inputs": [
+    {
+     "product": 1010566,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 270042,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010115,
+    "amount": 75
+   }
+  },
+  {
+   "id": 269840,
+   "name": "Fuel Station",
+   "region": 5000001,
+   "icon": "data/ui/2kimages/main/3dicons/icon_gasoline.png",
+   "tpmin": 4,
+   "inputs": [
+    {
+     "product": 1010566,
+     "amount": 1
+    }
+   ],
+   "outputs": [
+    {
+     "product": 270042,
+     "amount": 1
+    }
+   ],
+   "workforce": {
+    "type": 1010367,
+    "amount": 75
+   }
+  }
+ ],
+ "products": [
+  {
+   "id": 1010223,
+   "name": "Advanced Weapons",
+   "icon": "data/ui/2kimages/main/3dicons/icon_advanced_weaponry.png"
+  },
+  {
+   "id": 120036,
+   "name": "Alpaca Wool",
+   "icon": "data/ui/2kimages/main/3dicons/icon_alpaca_wool.png"
+  },
+  {
+   "id": 1010356,
+   "name": "Bank",
+   "icon": "data/ui/2kimages/main/3dicons/icon_bank.png"
+  },
+  {
+   "id": 1010193,
+   "name": "Beef",
+   "icon": "data/ui/2kimages/main/3dicons/icon_meat_raw.png"
+  },
+  {
+   "id": 1010214,
+   "name": "Beer",
+   "icon": "data/ui/2kimages/main/3dicons/icon_beer.png"
+  },
+  {
+   "id": 120037,
+   "name": "Bombins",
+   "icon": "data/ui/2kimages/main/3dicons/icon_bowler_hat.png"
+  },
+  {
+   "id": 1010348,
+   "name": "Boxing Arena",
+   "icon": "data/ui/2kimages/main/3dicons/icon_box_arena.png"
+  },
+  {
+   "id": 1010204,
+   "name": "Brass",
+   "icon": "data/ui/2kimages/main/3dicons/icon_brass.png"
+  },
+  {
+   "id": 1010213,
+   "name": "Bread",
+   "icon": "data/ui/2kimages/main/3dicons/icon_bread.png"
+  },
+  {
+   "id": 1010205,
+   "name": "Bricks",
+   "icon": "data/ui/2kimages/main/3dicons/icon_bricks.png"
+  },
+  {
+   "id": 1010217,
+   "name": "Canned Food",
+   "icon": "data/ui/2kimages/main/3dicons/icon_canned_goulash.png"
+  },
+  {
+   "id": 1010255,
+   "name": "Caoutchouc",
+   "icon": "data/ui/2kimages/main/3dicons/icon_caoutchouc.png"
+  },
+  {
+   "id": 1010231,
+   "name": "Cement",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cement.png"
+  },
+  {
+   "id": 120016,
+   "name": "Champagne",
+   "icon": "data/ui/2kimages/main/3dicons/icon_champagne.png"
+  },
+  {
+   "id": 120050,
+   "name": "Chapel",
+   "icon": "data/ui/2kimages/main/3dicons/icon_church.png"
+  },
+  {
+   "id": 1010211,
+   "name": "Chassis",
+   "icon": "data/ui/2kimages/main/3dicons/icon_chassis.png"
+  },
+  {
+   "id": 1010258,
+   "name": "Chocolate",
+   "icon": "data/ui/2kimages/main/3dicons/icon_chocolate.png"
+  },
+  {
+   "id": 1010350,
+   "name": "Church",
+   "icon": "data/ui/2kimages/main/3dicons/icon_church.png"
+  },
+  {
+   "id": 1010259,
+   "name": "Cigars",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cigars.png"
+  },
+  {
+   "id": 1010201,
+   "name": "Clay",
+   "icon": "data/ui/2kimages/main/3dicons/icon_clay.png"
+  },
+  {
+   "id": 1010226,
+   "name": "Coal",
+   "icon": "data/ui/2kimages/main/3dicons/icon_coal.png"
+  },
+  {
+   "id": 1010254,
+   "name": "Cocoa",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cocoa.png"
+  },
+  {
+   "id": 120032,
+   "name": "Coffee",
+   "icon": "data/ui/2kimages/main/3dicons/icon_coffe_cup.png"
+  },
+  {
+   "id": 120031,
+   "name": "Coffee Beans",
+   "icon": "data/ui/2kimages/main/3dicons/icon_coffee_beans.png"
+  },
+  {
+   "id": 1010230,
+   "name": "Copper",
+   "icon": "data/ui/2kimages/main/3dicons/icon_copper.png"
+  },
+  {
+   "id": 120034,
+   "name": "Corn",
+   "icon": "data/ui/2kimages/main/3dicons/icon_corn.png"
+  },
+  {
+   "id": 1010253,
+   "name": "Cotton",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cotton.png"
+  },
+  {
+   "id": 1010240,
+   "name": "Cotton Fabric",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cotton_fur.png"
+  },
+  {
+   "id": 1010222,
+   "name": "Dynamite",
+   "icon": "data/ui/2kimages/main/3dicons/icon_dynamite.png"
+  },
+  {
+   "id": 1010354,
+   "name": "Electricity",
+   "icon": "data/ui/2kimages/main/3dicons/icon_electric_works_oil.png"
+  },
+  {
+   "id": 120044,
+   "name": "Felt",
+   "icon": "data/ui/2kimages/main/3dicons/icon_felt.png"
+  },
+  {
+   "id": 1010243,
+   "name": "Filaments",
+   "icon": "data/ui/2kimages/main/3dicons/icon_carbon_filament.png"
+  },
+  {
+   "id": 1010200,
+   "name": "Fish",
+   "icon": "data/ui/2kimages/main/3dicons/icon_fish.png"
+  },
+  {
+   "id": 120042,
+   "name": "Fish Oil",
+   "icon": "data/ui/2kimages/main/3dicons/icon_fishoil.png"
+  },
+  {
+   "id": 1010235,
+   "name": "Flour",
+   "icon": "data/ui/2kimages/main/3dicons/icon_flour.png"
+  },
+  {
+   "id": 120033,
+   "name": "Fried Plantains",
+   "icon": "data/ui/2kimages/main/3dicons/icon_fried_bananas.png"
+  },
+  {
+   "id": 270042,
+   "name": "Fuel",
+   "icon": "data/ui/2kimages/main/3dicons/icon_gasoline.png"
+  },
+  {
+   "id": 1010247,
+   "name": "Fur Coats",
+   "icon": "data/ui/2kimages/main/3dicons/icon_fur_coats.png"
+  },
+  {
+   "id": 1010209,
+   "name": "Furs",
+   "icon": "data/ui/2kimages/main/3dicons/icon_fur.png"
+  },
+  {
+   "id": 1010241,
+   "name": "Glass",
+   "icon": "data/ui/2kimages/main/3dicons/icon_glass.png"
+  },
+  {
+   "id": 1010249,
+   "name": "Gold",
+   "icon": "data/ui/2kimages/main/3dicons/icon_gold.png"
+  },
+  {
+   "id": 1010233,
+   "name": "Gold Ore",
+   "icon": "data/ui/2kimages/main/3dicons/icon_gold_ore.png"
+  },
+  {
+   "id": 1010215,
+   "name": "Goulash",
+   "icon": "data/ui/2kimages/main/3dicons/icon_goulash_01.png"
+  },
+  {
+   "id": 1010192,
+   "name": "Grain",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cereals_2.png"
+  },
+  {
+   "id": 1010248,
+   "name": "Gramophones",
+   "icon": "data/ui/2kimages/main/3dicons/icon_phonographs.png"
+  },
+  {
+   "id": 120014,
+   "name": "Grapes",
+   "icon": "data/ui/2kimages/main/3dicons/icon_grapes.png"
+  },
+  {
+   "id": 1010194,
+   "name": "Hops",
+   "icon": "data/ui/2kimages/main/3dicons/icon_hops.png"
+  },
+  {
+   "id": 1010227,
+   "name": "Iron",
+   "icon": "data/ui/2kimages/main/3dicons/icon_iron.png"
+  },
+  {
+   "id": 1010250,
+   "name": "Jewellery",
+   "icon": "data/ui/2kimages/main/3dicons/icon_jewelry.png"
+  },
+  {
+   "id": 1010208,
+   "name": "Light Bulbs",
+   "icon": "data/ui/2kimages/main/3dicons/icon_light_bulb.png"
+  },
+  {
+   "id": 1010236,
+   "name": "Malt",
+   "icon": "data/ui/2kimages/main/3dicons/icon_malt.png"
+  },
+  {
+   "id": 120020,
+   "name": "Market",
+   "icon": "data/ui/2kimages/main/3dicons/icon_marketplace.png"
+  },
+  {
+   "id": 1010355,
+   "name": "Members Club",
+   "icon": "data/ui/2kimages/main/3dicons/icon_club_house.png"
+  },
+  {
+   "id": 1010566,
+   "name": "Oil",
+   "icon": "data/ui/2kimages/main/3dicons/icon_oil.png"
+  },
+  {
+   "id": 1010256,
+   "name": "Pearls",
+   "icon": "data/ui/2kimages/main/3dicons/icon_pearls.png"
+  },
+  {
+   "id": 1010245,
+   "name": "Penny Farthings",
+   "icon": "data/ui/2kimages/main/3dicons/icon_high_wheeler.png"
+  },
+  {
+   "id": 1010199,
+   "name": "Pigs",
+   "icon": "data/ui/2kimages/main/3dicons/icon_pigs.png"
+  },
+  {
+   "id": 120041,
+   "name": "Plantains",
+   "icon": "data/ui/2kimages/main/3dicons/icon_banana.png"
+  },
+  {
+   "id": 1010246,
+   "name": "Pocket Watches",
+   "icon": "data/ui/2kimages/main/3dicons/icon_pocket_watch.png"
+  },
+  {
+   "id": 120043,
+   "name": "Ponchos",
+   "icon": "data/ui/2kimages/main/3dicons/icon_poncho.png"
+  },
+  {
+   "id": 1010195,
+   "name": "Potatoes",
+   "icon": "data/ui/2kimages/main/3dicons/icon_potatoes.png"
+  },
+  {
+   "id": 1010349,
+   "name": "Pub",
+   "icon": "data/ui/2kimages/main/3dicons/icon_pub.png"
+  },
+  {
+   "id": 1010228,
+   "name": "Quartz Sand",
+   "icon": "data/ui/2kimages/main/3dicons/icon_quartz_sand.png"
+  },
+  {
+   "id": 1010198,
+   "name": "Red Peppers",
+   "icon": "data/ui/2kimages/main/3dicons/icon_pepper.png"
+  },
+  {
+   "id": 1010202,
+   "name": "Reinforced Concrete",
+   "icon": "data/ui/2kimages/main/3dicons/icon_reinforced_concrete.png"
+  },
+  {
+   "id": 1010257,
+   "name": "Rum",
+   "icon": "data/ui/2kimages/main/3dicons/icon_rum_barrel.png"
+  },
+  {
+   "id": 1010210,
+   "name": "Sails",
+   "icon": "data/ui/2kimages/main/3dicons/icon_sail.png"
+  },
+  {
+   "id": 1010232,
+   "name": "Saltpetre",
+   "icon": "data/ui/2kimages/main/3dicons/icon_niter.png"
+  },
+  {
+   "id": 1010238,
+   "name": "Sausages",
+   "icon": "data/ui/2kimages/main/3dicons/icon_meat_sausage.png"
+  },
+  {
+   "id": 1010216,
+   "name": "Schnapps",
+   "icon": "data/ui/2kimages/main/3dicons/icon_schnapps_4.png"
+  },
+  {
+   "id": 1010351,
+   "name": "School",
+   "icon": "data/ui/2kimages/main/3dicons/icon_school.png"
+  },
+  {
+   "id": 1010206,
+   "name": "Sewing Machines",
+   "icon": "data/ui/2kimages/main/3dicons/icon_sewing_machine.png"
+  },
+  {
+   "id": 1010203,
+   "name": "Soap",
+   "icon": "data/ui/2kimages/main/3dicons/icon_soap_2.png"
+  },
+  {
+   "id": 120030,
+   "name": "Spectacles",
+   "icon": "data/ui/2kimages/main/3dicons/icon_glasses.png"
+  },
+  {
+   "id": 1010225,
+   "name": "Steam Carriages",
+   "icon": "data/ui/2kimages/main/3dicons/icon_steam_carriage.png"
+  },
+  {
+   "id": 1010224,
+   "name": "Steam Motors",
+   "icon": "data/ui/2kimages/main/3dicons/icon_steam_machine.png"
+  },
+  {
+   "id": 1010219,
+   "name": "Steel",
+   "icon": "data/ui/2kimages/main/3dicons/icon_steel.png"
+  },
+  {
+   "id": 1010218,
+   "name": "Steel Beams",
+   "icon": "data/ui/2kimages/main/3dicons/icon_beams.png"
+  },
+  {
+   "id": 1010239,
+   "name": "Sugar",
+   "icon": "data/ui/2kimages/main/3dicons/icon_salt.png"
+  },
+  {
+   "id": 1010251,
+   "name": "Sugar Cane",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cane_sugar_1.png"
+  },
+  {
+   "id": 1010234,
+   "name": "Tallow",
+   "icon": "data/ui/2kimages/main/3dicons/icon_tallow.png"
+  },
+  {
+   "id": 1010196,
+   "name": "Timber",
+   "icon": "data/ui/2kimages/main/3dicons/icon_wooden_planks.png"
+  },
+  {
+   "id": 1010252,
+   "name": "Tobacco",
+   "icon": "data/ui/2kimages/main/3dicons/icon_tobacco.png"
+  },
+  {
+   "id": 120035,
+   "name": "Tortillas",
+   "icon": "data/ui/2kimages/main/3dicons/icon_burrito.png"
+  },
+  {
+   "id": 1010353,
+   "name": "University",
+   "icon": "data/ui/2kimages/main/3dicons/icon_university.png"
+  },
+  {
+   "id": 1010352,
+   "name": "Variety Theatre",
+   "icon": "data/ui/2kimages/main/3dicons/icon_cabaret.png"
+  },
+  {
+   "id": 1010221,
+   "name": "Weapons",
+   "icon": "data/ui/2kimages/main/3dicons/icon_weapons.png"
+  },
+  {
+   "id": 1010207,
+   "name": "Windows",
+   "icon": "data/ui/2kimages/main/3dicons/icon_glass_window_3.png"
+  },
+  {
+   "id": 120008,
+   "name": "Wood",
+   "icon": "data/ui/2kimages/main/3dicons/icon_wood_log.png"
+  },
+  {
+   "id": 1010242,
+   "name": "Wood Veneers",
+   "icon": "data/ui/2kimages/main/3dicons/icon_inlay.png"
+  },
+  {
+   "id": 1010197,
+   "name": "Wool",
+   "icon": "data/ui/2kimages/main/3dicons/icon_wool.png"
+  },
+  {
+   "id": 1010237,
+   "name": "Work Clothes",
+   "icon": "data/ui/2kimages/main/3dicons/icon_working_cloth.png"
+  },
+  {
+   "id": 1010229,
+   "name": "Zinc",
+   "icon": "data/ui/2kimages/main/3dicons/icon_tin_ore.png"
+  }
+ ]
+}
