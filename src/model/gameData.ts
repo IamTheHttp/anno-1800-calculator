@@ -42,7 +42,7 @@ export interface Need {
   /** Residents of this tier on the island before the need appears. */
   unlockAt: number | null;
   bonus: boolean;
-  /** The game's MoneyValue: tax per full house is money / 10. */
+  /** The game's MoneyValue: each resident pays money / 100 coins per minute. */
   money: number;
 }
 

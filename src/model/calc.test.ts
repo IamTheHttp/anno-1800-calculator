@@ -4,6 +4,7 @@ import {
   collectBuildings,
   empireShortGoods,
   islandIncome,
+  royalTaxRate,
   shortages,
   empireBalance,
   empireRequiredBuildings,
@@ -19,6 +20,7 @@ const OLD_WORLD = 5000000;
 const NEW_WORLD = 5000001;
 const FARMERS = 15000000;
 const WORKERS = 15000001;
+const INVESTORS = 15000004;
 const FISH = 1010200;
 const SCHNAPPS = 1010216;
 const WORK_CLOTHES = 1010237;
@@ -203,13 +205,18 @@ describe('shortages', () => {
 });
 
 describe('islandIncome', () => {
-  it('pays MoneyValue / 10 per full farmer house', () => {
-    // 150 farmers = 15 full houses; fish 10 + schnapps 30 + work clothes 30 + pub 12 = 82 → 8.2 per house.
-    const inc = islandIncome(island({ residents: { [FARMERS]: 150 } }), unlocks);
-    expect(inc.taxes).toBeCloseTo(15 * 8.2, 6);
+  it('pays MoneyValue / 100 per resident, matching the wiki per-house figures', () => {
+    // Farmer house (10): fish 1 + schnapps 3 + work clothes 3 + pub 1.2 = 8.2.
+    expect(islandIncome(island({ residents: { [FARMERS]: 150 } }), unlocks).taxes).toBeCloseTo(15 * 8.2, 6);
+    // Investor house (50) on low income: steam carriages alone pay 150.
+    const investors = islandIncome(island({ residents: { [INVESTORS]: 5000 } }), unlocks);
+    const perHouse = investors.tiers[0].taxes / 100;
+    expect(perHouse).toBeGreaterThan(150);
+    // Full investor needs sum to MoneyValue 1740 → 870 per house.
+    expect(perHouse).toBeCloseTo(870, 6);
   });
 
-  it('applies the revenue bonus to taxes only', () => {
+  it('applies the revenue multiplier to taxes only', () => {
     const i = island({ residents: { [FARMERS]: 150 }, buildings: { [FISHERY]: 1 } });
     const spare = islandIncome(i, unlocks);
     const plenty = islandIncome(i, { ...unlocks, revenue: 'plenty' });
@@ -224,6 +231,18 @@ describe('islandIncome', () => {
     expect(small.taxes).toBeCloseTo(6, 6);
     const rum = island({ residents: { [WORKERS]: 1000 } });
     expect(islandIncome({ ...rum, bonusNeeds: [RUM] }, unlocks).taxes).toBeGreaterThan(islandIncome(rum, unlocks).taxes);
+  });
+
+  it('deducts royal taxes per tier from 1000 residents', () => {
+    expect(royalTaxRate(999)).toBe(0);
+    expect(royalTaxRate(1000)).toBe(9);
+    expect(royalTaxRate(2000)).toBe(17);
+    expect(royalTaxRate(4875)).toBe(40);
+    expect(royalTaxRate(20000)).toBe(40);
+    // The wiki example: 2000 farmers paying 2000 coins lose 17% = 340.
+    const inc = islandIncome(island({ residents: { [FARMERS]: 2000 } }), unlocks);
+    expect(inc.tiers[0].royalTax).toBe(Math.floor(inc.taxes * 0.17));
+    expect(inc.net).toBeCloseTo(inc.taxes - inc.royalTaxes, 6);
   });
 
   it('reports taxes at risk from goods the empire lacks', () => {

@@ -136,11 +136,11 @@ function EmpireIncome({
   onOpenIsland: (id: string) => void;
 }) {
   if (islands.length === 0) return <Empty>No islands yet.</Empty>;
-  const sum = (k: 'taxes' | 'maintenance' | 'atRisk' | 'net') => incomes.reduce((s, i) => s + i[k], 0);
+  const sum = (k: 'taxes' | 'royalTaxes' | 'maintenance' | 'atRisk' | 'net') => incomes.reduce((s, i) => s + i[k], 0);
   return (
     <>
       <p className="lede">
-        Coins per minute with every unlocked need met, including the Revenue difficulty bonus. Public buildings, warehouses and
+        Coins per minute with every unlocked need met, including the Revenue difficulty multiplier and royal taxes. Public buildings, warehouses and
         ships are not counted.
       </p>
       <div className="table-wrap">
@@ -149,6 +149,7 @@ function EmpireIncome({
             <tr>
               <th>Island</th>
               <th className="num">Taxes</th>
+              <th className="num" title="Crown's share of each tier's taxes on the island">Royal taxes</th>
               <th className="num">Upkeep</th>
               <th className="num">Balance</th>
               <th className="num" title="Tax tied to goods the empire is short of">At risk</th>
@@ -165,6 +166,7 @@ function EmpireIncome({
                     </span>
                   </td>
                   <td className="num">{fmt(inc.taxes, 0)}</td>
+                  <td className="num">{fmt(inc.royalTaxes, 0)}</td>
                   <td className="num">{fmt(inc.maintenance, 0)}</td>
                   <td className={`num strong ${signClass(inc.net)}`}>{fmtSigned(inc.net, 0)}</td>
                   <td className={`num ${inc.atRisk > 0 ? 'neg' : 'zero'}`}>{inc.atRisk > 0 ? `−${fmt(inc.atRisk, 0)}` : '—'}</td>
@@ -174,6 +176,7 @@ function EmpireIncome({
             <tr className="total">
               <td>Empire</td>
               <td className="num">{fmt(sum('taxes'), 0)}</td>
+              <td className="num">{fmt(sum('royalTaxes'), 0)}</td>
               <td className="num">{fmt(sum('maintenance'), 0)}</td>
               <td className={`num strong ${signClass(sum('net'))}`}>{fmtSigned(sum('net'), 0)}</td>
               <td className={`num ${sum('atRisk') > 0 ? 'neg' : 'zero'}`}>{sum('atRisk') > 0 ? `−${fmt(sum('atRisk'), 0)}` : '—'}</td>

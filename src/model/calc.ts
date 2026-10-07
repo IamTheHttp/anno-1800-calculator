@@ -299,6 +299,8 @@ export interface TierIncome {
   residents: number;
   /** Taxes with every need met, difficulty bonus included. */
   taxes: number;
+  /** Royal taxes the crown deducts from this tier's taxes. */
+  royalTax: number;
   /** Part of `taxes` that depends on goods the empire is short of. */
   atRisk: number;
 }
@@ -306,16 +308,23 @@ export interface TierIncome {
 export interface Income {
   tiers: TierIncome[];
   taxes: number;
+  royalTaxes: number;
   atRisk: number;
   maintenance: number;
-  /** taxes − maintenance. */
+  /** taxes − royalTaxes − maintenance. */
   net: number;
 }
 
 /**
- * Coins per minute: taxes (MoneyValue / 10 per full house, scaled by
- * occupancy, plus the Revenue bonus) minus production-building upkeep.
- * Public buildings, warehouses and ships are not counted.
+ * Royal tax rate (percent) for one tier on one island: none below 1000
+ * residents, then floor(1 + residents / 125), capped at 40% from 4875.
+ */
+export const royalTaxRate = (residents: number) => (residents < 1000 ? 0 : Math.min(40, Math.floor(1 + residents / 125)));
+
+/**
+ * Coins per minute: taxes (MoneyValue / 100 per resident per met need, times
+ * the Revenue multiplier), minus royal taxes per tier, minus production-building
+ * upkeep. Public buildings, warehouses and ships are not counted.
  */
 export function islandIncome(island: Island, settings: Settings, shortGoods: Set<Id> = new Set()): Income {
   const factor = 1 + REVENUE_BONUS[settings.revenue];
@@ -323,19 +332,20 @@ export function islandIncome(island: Island, settings: Settings, shortGoods: Set
   for (const [levelId, residents] of Object.entries(island.residents)) {
     const level = levelById.get(Number(levelId));
     if (!level || residents <= 0) continue;
-    const houses = residents / level.fullHouse;
     let taxes = 0;
     let atRisk = 0;
     for (const n of taxedNeeds(level, residents, island, settings)) {
-      const t = (n.money / 10) * houses * factor;
+      const t = (n.money / 100) * residents * factor;
       taxes += t;
       if (shortGoods.has(n.product)) atRisk += t;
     }
-    tiers.push({ level: level.id, residents, taxes, atRisk });
+    const royalTax = Math.floor((taxes * royalTaxRate(residents)) / 100);
+    tiers.push({ level: level.id, residents, taxes, royalTax, atRisk });
   }
   let maintenance = 0;
   for (const [fid, count] of Object.entries(island.buildings)) maintenance += (factoryById.get(Number(fid))?.maintenance ?? 0) * count;
   const taxes = tiers.reduce((s, t) => s + t.taxes, 0);
+  const royalTaxes = tiers.reduce((s, t) => s + t.royalTax, 0);
   const atRisk = tiers.reduce((s, t) => s + t.atRisk, 0);
-  return { tiers, taxes, atRisk, maintenance, net: taxes - maintenance };
+  return { tiers, taxes, royalTaxes, atRisk, maintenance, net: taxes - royalTaxes - maintenance };
 }

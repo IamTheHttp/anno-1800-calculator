@@ -23,7 +23,7 @@ Working conditions, items, electricity, and trade unions are not modelled.
   building rows ("+N needed", output short, input short), on balance rows, and
   as counts next to each island in the sidebar.
 - **Income** — coins per minute per island and for the empire: taxes minus
-  production-building upkeep. The "Revenue" difficulty setting in the top bar
+  royal taxes, minus production-building upkeep. The "Revenue" difficulty setting in the top bar
   adds its tax bonus. Tax tied to goods the empire lacks shows as "at risk".
 - **Empire overview** — all islands summed, plus a "what to build next" list.
   It assumes any surplus can reach any deficit.
@@ -66,8 +66,11 @@ Delete `.data-src/` first to pull the latest upstream data.
   "Needed" is resident demand plus the inputs of factories that are
   themselves needed. Goods no resident or factory uses (bricks, steel beams,
   weapons, …) run at full capacity.
-- Each met need pays `MoneyValue / 10` coins per minute per full house, scaled
-  by occupancy, times `1 + Revenue bonus` (Plenty 25%, Medium 12.5%, Spare 0%).
+- Each met need pays `MoneyValue / 100` coins per minute per resident, times
+  the Revenue multiplier (Plenty ×1.25, Medium ×1.125, Spare ×1).
+- Royal taxes take a share of each tier's taxes per island: none below 1,000
+  residents, then `floor(1 + residents / 125)` percent, capped at 40% from
+  4,875 residents.
 - Upkeep is each production building's coin maintenance. Public buildings,
   warehouses, ships, and inactive-building costs are not counted.
 

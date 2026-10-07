@@ -148,7 +148,7 @@ export function IslandView({
       {tab === 'income' && (
         <>
           <p className="lede">
-            Coins per minute with every unlocked need met. “At risk” is the tax tied to goods the whole empire is short of.
+            Coins per minute with every unlocked need met, after royal taxes. “At risk” is the tax tied to goods the whole empire is short of.
           </p>
           <IncomeTable income={income} />
         </>

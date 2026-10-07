@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ceilWhole, type BuildingPlan, type Income, type ProductBalance, type Shortage, type WorkforceBalance } from '../model/calc';
+import { ceilWhole, royalTaxRate, type BuildingPlan, type Income, type ProductBalance, type Shortage, type WorkforceBalance } from '../model/calc';
 import { levelById, outputRate, producerFor, workforceById, type Id } from '../model/gameData';
 import { Empty, Icon, ProductLabel, RegionBadge } from './common';
 import { fmt, fmtSigned, signClass } from './format';
@@ -172,6 +172,9 @@ export function IncomeTable({ income }: { income: Income }) {
             <th>Source</th>
             <th className="num">Residents</th>
             <th className="num">Coins / min</th>
+            <th className="num" title="Crown's share of this tier's taxes: from 9% at 1,000 residents up to 40% at 4,875">
+              Royal tax
+            </th>
             <th className="num" title="Tax tied to goods the empire is short of">At risk</th>
           </tr>
         </thead>
@@ -188,6 +191,9 @@ export function IncomeTable({ income }: { income: Income }) {
                 </td>
                 <td className="num">{fmt(t.residents, 0)}</td>
                 <td className="num pos">{fmtSigned(t.taxes, 0)}</td>
+                <td className={`num ${t.royalTax > 0 ? 'neg' : 'zero'}`}>
+                  {t.royalTax > 0 ? `−${fmt(t.royalTax, 0)} (${royalTaxRate(t.residents)}%)` : '—'}
+                </td>
                 <td className={`num ${t.atRisk > 0 ? 'neg' : 'zero'}`}>{t.atRisk > 0 ? `−${fmt(t.atRisk, 0)}` : '—'}</td>
               </tr>
             );
@@ -197,11 +203,13 @@ export function IncomeTable({ income }: { income: Income }) {
             <td />
             <td className="num neg">{income.maintenance > 0 ? `−${fmt(income.maintenance, 0)}` : '0'}</td>
             <td />
+            <td />
           </tr>
           <tr className="total">
             <td>Balance</td>
             <td />
             <td className={`num strong ${signClass(income.net)}`}>{fmtSigned(income.net, 0)}</td>
+            <td className={`num ${income.royalTaxes > 0 ? 'neg' : 'zero'}`}>{income.royalTaxes > 0 ? `−${fmt(income.royalTaxes, 0)}` : '—'}</td>
             <td className={`num ${income.atRisk > 0 ? 'neg' : 'zero'}`}>
               {income.atRisk > 0 ? `${fmtSigned(income.net - income.atRisk, 0)} if unsupplied` : '—'}
             </td>
