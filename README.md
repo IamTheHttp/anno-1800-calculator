@@ -25,12 +25,20 @@ Working conditions, items, electricity, and trade unions are not modelled.
 - **Income** — coins per minute per island and for the empire: taxes minus
   royal taxes, minus production-building upkeep. The "Revenue" difficulty setting in the top bar
   adds its tax bonus. Tax tied to goods the empire lacks shows as "at risk".
+- **Trade routes** — ship a good from one island to another, either a fixed
+  t/min or **Auto** (what the destination lacks, up to the source's surplus).
+  Islands' balances show a Trade column, shortages are computed after trade,
+  and the needs plan moves an exported good's chain to the producing island.
+  Clicking an amber "Missing" chip adds an Auto route from the island with the
+  most spare; the Trade routes page lists every route and suggests new ones.
+  Ship capacity and travel time are not modelled.
 - **Empire overview** — all islands summed, plus a "what to build next" list.
   It assumes any surplus can reach any deficit.
 - **Supply chains** — the full tree behind N buildings of any good.
 - **Need unlocks** — needs appear only once an island reaches the game's
   resident threshold (toggle in the top bar). Bonus needs (e.g. rum for
   workers) count only when ticked on the island.
+- **Theme** — Auto (follows the OS), Light, or Dark, from the top bar.
 - **Import / export** — the whole plan as a versioned JSON file. The plan also
   autosaves to the browser's local storage.
 
@@ -62,6 +70,7 @@ Delete `.data-src/` first to pull the latest upstream data.
 - A building makes `tpmin × output amount` tons per minute.
 - A tier consumes `residents × tpmin` tons per minute of each active need.
 - One resident provides one worker of its tier.
+- Routes: fixed amounts ship first, then Auto routes in list order.
 - A factory runs at `min(1, needed / capacity)` of its output, empire-wide.
   "Needed" is resident demand plus the inputs of factories that are
   themselves needed. Goods no resident or factory uses (bricks, steel beams,
@@ -85,9 +94,12 @@ Actions*. Pages on a private repository needs a paid GitHub plan.
 ```json
 {
   "app": "anno1800-planner",
-  "version": 1,
+  "version": 2,
   "exportedAt": "2026-10-07T12:00:00.000Z",
   "settings": { "applyUnlocks": true, "revenue": "medium" },
+  "routes": [
+    { "id": "r1", "from": "p2x8mq01", "to": "k3j9x0aa", "product": 1010216, "amount": null }
+  ],
   "islands": [
     {
       "id": "k3j9x0aa",
@@ -103,5 +115,6 @@ Actions*. Pages on a private repository needs a paid GitHub plan.
 ```
 
 Keys of `residents` and `buildings` are game ids (population levels and
-buildings, see `src/data/game-data.json`). Unknown ids are dropped on import
-with a warning.
+buildings, see `src/data/game-data.json`). A route's `amount` is t/min, or
+`null` for Auto. Unknown ids, and routes to missing islands, are dropped on
+import with a warning. Version 1 files (no routes) still import.

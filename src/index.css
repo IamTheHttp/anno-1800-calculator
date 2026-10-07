@@ -885,3 +885,87 @@ tr.total td {
   color: var(--muted);
   background: var(--surface-2);
 }
+
+/* Trade */
+
+button.chip-action {
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+
+.chip-hint {
+  margin-left: 4px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.add-route label,
+.route-amount {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button.link {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button.link:hover {
+  text-decoration: underline;
+}
+
+.suggestions,
+.route-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.suggestions li,
+.route-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge.pos {
+  color: var(--pos);
+}
+
+.badge.warn {
+  color: var(--warn);
+}
+
+/* Theme switch */
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.segmented button {
+  border: none;
+  border-radius: 0;
+  padding: 4px 10px;
+  background: var(--surface);
+}
+
+.segmented button + button {
+  border-left: 1px solid var(--border);
+}
+
+.segmented button.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+}

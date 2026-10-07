@@ -3,6 +3,8 @@ import { ChainView } from './components/ChainView';
 import { RegionBadge } from './components/common';
 import { usePref } from './components/usePref';
 import { EmpireView } from './components/EmpireView';
+import { TradeView } from './components/TradeView';
+import { applyTheme, THEME_PREF, THEMES, type Theme } from './components/theme';
 import { IslandView } from './components/IslandView';
 import { analyze, shortages, type Shortage } from './model/calc';
 import { game } from './model/gameData';
@@ -14,17 +16,19 @@ const REVENUE_LABEL: Record<Revenue, string> = {
   spare: 'Spare (+0% tax)',
 };
 
-type View = { kind: 'empire' } | { kind: 'chains' } | { kind: 'island'; id: string };
+type View = { kind: 'empire' } | { kind: 'chains' } | { kind: 'trade' } | { kind: 'island'; id: string };
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, undefined, loadSaved);
   const [view, setView] = usePref<View>('view', { kind: 'empire' });
+  const [theme, setTheme] = usePref<Theme>(THEME_PREF, 'system');
+  useEffect(() => applyTheme(theme), [theme]);
   const [notice, setNotice] = useState<{ tone: 'ok' | 'error'; text: string } | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => save(state), [state]);
 
-  const analysis = useMemo(() => analyze(state.islands, state.settings), [state.islands, state.settings]);
+  const analysis = useMemo(() => analyze(state.islands, state.settings, state.routes), [state.islands, state.settings, state.routes]);
   const islandShortages = useMemo(
     () => new Map(state.islands.map((i) => [i.id, [...shortages(analysis.byIsland.get(i.id) ?? [], analysis.empire).values()]])),
     [state.islands, analysis],
@@ -68,6 +72,13 @@ export default function App() {
       <header className="topbar">
         <h1>Anno 1800 Planner</h1>
         <div className="topbar-actions">
+          <div className="segmented" role="radiogroup" aria-label="Theme">
+            {THEMES.map((t) => (
+              <button key={t} type="button" role="radio" aria-checked={theme === t} className={theme === t ? 'active' : ''} onClick={() => setTheme(t)}>
+                {t === 'system' ? 'Auto' : t === 'light' ? 'Light' : 'Dark'}
+              </button>
+            ))}
+          </div>
           <label className="check" title="Hide needs an island has not unlocked yet by resident count">
             <input
               type="checkbox"
@@ -121,6 +132,9 @@ export default function App() {
           <button type="button" className={`nav ${current.kind === 'empire' ? 'active' : ''}`} onClick={() => setView({ kind: 'empire' })}>
             Empire overview
           </button>
+          <button type="button" className={`nav ${current.kind === 'trade' ? 'active' : ''}`} onClick={() => setView({ kind: 'trade' })}>
+            Trade routes{state.routes.length > 0 && <span className="muted"> ({state.routes.length})</span>}
+          </button>
           <button type="button" className={`nav ${current.kind === 'chains' ? 'active' : ''}`} onClick={() => setView({ kind: 'chains' })}>
             Supply chains
           </button>
@@ -160,7 +174,24 @@ export default function App() {
             <EmpireView islands={state.islands} settings={state.settings} analysis={analysis} onOpenIsland={(id) => setView({ kind: 'island', id })} />
           )}
           {current.kind === 'chains' && <ChainView />}
-          {current.kind === 'island' && island && <IslandView island={island} settings={state.settings} analysis={analysis} dispatch={dispatch} />}
+          {current.kind === 'trade' && (
+            <TradeView
+              islands={state.islands}
+              routes={state.routes}
+              analysis={analysis}
+              dispatch={dispatch}
+              onOpenIsland={(id) => setView({ kind: 'island', id })}
+            />
+          )}
+          {current.kind === 'island' && island && <IslandView
+              island={island}
+              islands={state.islands}
+              routes={state.routes}
+              settings={state.settings}
+              analysis={analysis}
+              dispatch={dispatch}
+              onOpenTrade={() => setView({ kind: 'trade' })}
+            />}
         </main>
       </div>
     </div>

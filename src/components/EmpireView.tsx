@@ -32,13 +32,13 @@ export function EmpireView({
   const [tab, setTab] = usePref<Tab>('empireTab', 'next');
   const short = useMemo(() => empireShortGoods(balance), [balance]);
   const incomes = useMemo(() => islands.map((i) => islandIncome(i, settings, short)), [islands, settings, short]);
-  const plan = useMemo(() => empireRequiredBuildings(islands, settings), [islands, settings]);
+  const plan = useMemo(() => empireRequiredBuildings(islands, settings, analysis.trade), [islands, settings, analysis.trade]);
 
   return (
     <section className="view">
       <h2>Empire</h2>
       <p className="lede">
-        All islands together, as if every surplus could reach every deficit. Trade routes are not modelled yet.
+        All islands together, as if every surplus could reach every deficit. Island-level shortages and routes are on each island and the Trade routes page.
       </p>
       <IslandSummary islands={islands} analysis={analysis} incomes={incomes} onOpenIsland={onOpenIsland} />
       <Tabs<Tab>

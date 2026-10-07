@@ -11,7 +11,8 @@ import {
   type Need,
   type PopulationLevel,
 } from './gameData';
-import type { Island, Revenue, Settings } from './state';
+import type { Island, Revenue, Settings, TradeRoute } from './state';
+import { resolveRoutes, type RouteFlow } from './trade';
 
 export type Rates = Map<Id, number>;
 
@@ -43,7 +44,9 @@ export interface ProductBalance {
   produced: number;
   residents: number;
   factories: number;
-  /** produced − residents − factories, in tons per minute. */
+  /** + imports − exports over trade routes. */
+  trade: number;
+  /** produced − residents − factories + trade, in tons per minute. */
   net: number;
 }
 
@@ -132,31 +135,52 @@ function mergeBalance(produced: Rates, residents: Rates, factories: Rates): Prod
     const p = produced.get(product) ?? 0;
     const r = residents.get(product) ?? 0;
     const f = factories.get(product) ?? 0;
-    return { product, produced: p, residents: r, factories: f, net: p - r - f };
+    return { product, produced: p, residents: r, factories: f, trade: 0, net: p - r - f };
   });
 }
 
 export interface Analysis {
   utilization: Utilization;
+  /** All islands summed; trade moves goods between islands, so it nets out here. */
   empire: ProductBalance[];
+  /** Per island, after trade routes. */
   byIsland: Map<string, ProductBalance[]>;
+  flows: RouteFlow[];
+  /** Per island, per good: + imports − exports. */
+  trade: Map<string, Map<Id, number>>;
 }
 
-/** Island and empire balances, with factories running at empire-wide utilization. */
-export function analyze(islands: Island[], settings: Settings): Analysis {
+/** Island and empire balances, with factories running at empire-wide utilization and routes applied. */
+export function analyze(islands: Island[], settings: Settings, routes: TradeRoute[] = []): Analysis {
   const util = utilization(islands, settings);
-  const byIsland = new Map(islands.map((i) => [i.id, islandBalance(i, settings, util)]));
+  const preTrade = new Map(islands.map((i) => [i.id, islandBalance(i, settings, util)]));
   const produced: Rates = new Map();
   const residents: Rates = new Map();
   const factories: Rates = new Map();
-  for (const balance of byIsland.values()) {
+  for (const balance of preTrade.values()) {
     for (const b of balance) {
       add(produced, b.product, b.produced);
       add(residents, b.product, b.residents);
       add(factories, b.product, b.factories);
     }
   }
-  return { utilization: util, empire: mergeBalance(produced, residents, factories), byIsland };
+  const nets = new Map([...preTrade].map(([id, bal]) => [id, new Map(bal.map((b) => [b.product, b.net]))]));
+  const { flows, net: trade } = resolveRoutes(routes, nets);
+  const byIsland = new Map(
+    [...preTrade].map(([id, bal]) => {
+      const t = trade.get(id);
+      if (!t) return [id, bal];
+      const rows = new Map(bal.map((b) => [b.product, { ...b }]));
+      for (const [product, v] of t) {
+        const row = rows.get(product) ?? { product, produced: 0, residents: 0, factories: 0, trade: 0, net: 0 };
+        row.trade += v;
+        row.net += v;
+        rows.set(product, row);
+      }
+      return [id, [...rows.values()]];
+    }),
+  );
+  return { utilization: util, empire: mergeBalance(produced, residents, factories), byIsland, flows, trade };
 }
 
 /** Sums island balances, as if every island could ship to every other one. */
@@ -202,21 +226,68 @@ export interface BuildingPlan {
   missing: number;
 }
 
-/** Population-driven view: buildings needed for an island's residents. */
-export function requiredBuildings(island: Island, settings: Settings): BuildingPlan[] {
-  const need = new Map<Id, number>();
-  for (const [product, rate] of residentDemand(island, settings)) {
-    collectBuildings(supplyChain(product, rate, island.region), need);
+/**
+ * Buildings needed to meet external demands through the full chain. Demands
+ * are keyed by good and the region that consumes it; a negative demand (an
+ * import) offsets the chain at that point. Inputs come from the region of the
+ * building that uses them.
+ */
+export function chainBuildings(external: Map<string, number>): Map<Id, number> {
+  const key = (product: Id, region: Id) => `${product}:${region}`;
+  const nodes = new Map<string, { product: Id; region: Id }>();
+  const order: string[] = [];
+  const visit = (product: Id, region: Id) => {
+    const k = key(product, region);
+    if (nodes.has(k)) return;
+    nodes.set(k, { product, region });
+    const f = producerFor(product, region);
+    if (f) for (const i of f.inputs) visit(i.product, f.region);
+    order.push(k);
+  };
+  for (const k of external.keys()) {
+    const [product, region] = k.split(':').map(Number);
+    visit(product, region);
   }
-  return planFrom(need, island.buildings);
+  // Reverse post-order puts every good before the inputs it consumes.
+  const inflow = new Map(external);
+  const out = new Map<Id, number>();
+  for (const k of order.reverse()) {
+    const { product, region } = nodes.get(k)!;
+    const rate = inflow.get(k) ?? 0;
+    const f = producerFor(product, region);
+    if (!f || rate <= 0) continue;
+    const buildings = rate / outputRate(f);
+    add(out, f.id, buildings);
+    for (const i of f.inputs) {
+      const ck = key(i.product, f.region);
+      inflow.set(ck, (inflow.get(ck) ?? 0) + buildings * f.tpmin * i.amount);
+    }
+  }
+  return out;
+}
+
+/**
+ * Population-driven view: buildings needed for an island's residents, plus
+ * its exports, minus what it imports (`trade`: + imports − exports).
+ */
+export function requiredBuildings(island: Island, settings: Settings, trade?: Map<Id, number>): BuildingPlan[] {
+  const external = new Map<string, number>();
+  const at = (product: Id) => `${product}:${island.region}`;
+  for (const [product, rate] of residentDemand(island, settings)) external.set(at(product), rate);
+  for (const [product, t] of trade ?? []) external.set(at(product), (external.get(at(product)) ?? 0) - t);
+  return planFrom(chainBuildings(external), island.buildings);
 }
 
 /** Population-driven view across all islands, against all existing buildings. */
-export function empireRequiredBuildings(islands: Island[], settings: Settings): BuildingPlan[] {
+export function empireRequiredBuildings(
+  islands: Island[],
+  settings: Settings,
+  trade?: Map<string, Map<Id, number>>,
+): BuildingPlan[] {
   const need = new Map<Id, number>();
   const existing: Record<string, number> = {};
   for (const island of islands) {
-    for (const p of requiredBuildings(island, settings)) add(need, p.factory.id, p.required);
+    for (const p of requiredBuildings(island, settings, trade?.get(island.id))) add(need, p.factory.id, p.required);
     for (const [fid, n] of Object.entries(island.buildings)) existing[fid] = (existing[fid] ?? 0) + n;
   }
   return planFrom(need, existing);

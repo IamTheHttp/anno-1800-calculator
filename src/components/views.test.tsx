@@ -5,6 +5,7 @@ import { newIsland } from '../model/state';
 import { ChainView } from './ChainView';
 import { EmpireView } from './EmpireView';
 import { IslandView } from './IslandView';
+import { TradeView } from './TradeView';
 
 const settings = { applyUnlocks: true, revenue: 'medium' as const };
 const ow = { ...newIsland('Crown Falls', 5000000), residents: { 15000000: 500, 15000001: 800 }, buildings: { 1010278: 1 } };
@@ -14,7 +15,7 @@ const analysis = analyze([ow, nw], settings);
 
 describe('views render', () => {
   it('island view', () => {
-    const html = renderToString(<IslandView island={ow} settings={settings} analysis={analysis} dispatch={() => {}} />);
+    const html = renderToString(<IslandView island={ow} islands={[ow, nw]} routes={[]} settings={settings} analysis={analysis} dispatch={() => {}} onOpenTrade={() => {}} />);
     expect(html).toContain('Crown Falls');
     expect(html).toContain('Fishery');
     expect(html).toContain('shortage-strip');
@@ -24,6 +25,14 @@ describe('views render', () => {
   it('empire view', () => {
     const html = renderToString(<EmpireView islands={[ow, nw]} settings={settings} analysis={analysis} onOpenIsland={() => {}} />);
     expect(html).toContain('Manola');
+  });
+
+  it('trade view', () => {
+    const routes = [{ id: 'r', from: nw.id, to: ow.id, product: 1010257, amount: null }];
+    const a = analyze([ow, nw], settings, routes);
+    const html = renderToString(<TradeView islands={[ow, nw]} routes={routes} analysis={a} dispatch={() => {}} onOpenIsland={() => {}} />);
+    expect(html).toContain('Rum');
+    expect(html).toContain('Suggested routes');
   });
 
   it('chain view', () => {

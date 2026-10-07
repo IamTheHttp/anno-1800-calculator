@@ -25,7 +25,8 @@ import {
   type Factory,
   type Id,
 } from '../model/gameData';
-import type { Action, Island, Settings } from '../model/state';
+import { newId, type Action, type Island, type Settings, type TradeRoute } from '../model/state';
+import { bestSource } from '../model/suggest';
 import { Icon, NumberInput, RegionBadge, Tabs } from './common';
 import { fmt, fmtSigned } from './format';
 import { usePref } from './usePref';
@@ -51,19 +52,25 @@ const SHORTAGE_TEXT: Record<Shortage, string> = {
 
 export function IslandView({
   island,
+  islands,
+  routes,
   settings,
   analysis,
   dispatch,
+  onOpenTrade,
 }: {
   island: Island;
+  islands: Island[];
+  routes: TradeRoute[];
   settings: Settings;
   analysis: Analysis;
   dispatch: Dispatch<Action>;
+  onOpenTrade: () => void;
 }) {
   const [tab, setTab] = usePref<Tab>('islandTab', 'setup');
   const empire = analysis.empire;
   const balance = useMemo(() => analysis.byIsland.get(island.id) ?? [], [analysis, island.id]);
-  const plan = useMemo(() => requiredBuildings(island, settings), [island, settings]);
+  const plan = useMemo(() => requiredBuildings(island, settings, analysis.trade.get(island.id)), [island, settings, analysis.trade]);
   const workforce = useMemo(() => workforceBalance(island), [island]);
   const income = useMemo(() => islandIncome(island, settings, empireShortGoods(empire)), [island, settings, empire]);
 
@@ -100,7 +107,14 @@ export function IslandView({
         />
         <Stat label="Coins / min" value={fmtSigned(income.net, 0)} tone={income.net < 0 ? 'neg' : 'pos'} onClick={() => setTab('income')} />
       </div>
-      <ShortageStrip balance={balance} shortage={marks.shortage} />
+      <ShortageStrip
+        balance={balance}
+        shortage={marks.shortage}
+        sourceFor={(product) => bestSource(analysis, islands, island.id, product)?.island ?? null}
+        onRoute={(from, product) =>
+          dispatch({ type: 'addRoute', route: { id: newId(), from: from.id, to: island.id, product, amount: null } })
+        }
+      />
       <Tabs<Tab>
         active={tab}
         onChange={setTab}
@@ -117,6 +131,7 @@ export function IslandView({
         <>
           <p className="lede">What this island's buildings make, against what its residents and factories use.</p>
           <BalanceTable rows={balance} region={island.region} shortage={marks.shortage} />
+          <IslandRoutes island={island} islands={islands} routes={routes} analysis={analysis} onOpenTrade={onOpenTrade} />
         </>
       )}
       {tab === 'plan' && (
@@ -175,8 +190,18 @@ function Stat({ label, value, tone, onClick }: { label: string; value: string; t
   );
 }
 
-/** Every good this island is short of, worst first. */
-function ShortageStrip({ balance, shortage }: { balance: ProductBalance[]; shortage: Map<Id, Shortage> }) {
+/** Every good this island is short of, worst first. Amber chips add a route from the best source. */
+function ShortageStrip({
+  balance,
+  shortage,
+  sourceFor,
+  onRoute,
+}: {
+  balance: ProductBalance[];
+  shortage: Map<Id, Shortage>;
+  sourceFor: (product: Id) => Island | null;
+  onRoute: (from: Island, product: Id) => void;
+}) {
   if (shortage.size === 0) return null;
   const rows = balance.filter((b) => shortage.has(b.product)).sort((a, b) => a.net - b.net);
   return (
@@ -185,15 +210,87 @@ function ShortageStrip({ balance, shortage }: { balance: ProductBalance[]; short
       {rows.map((b) => {
         const s = shortage.get(b.product)!;
         const p = productById.get(b.product);
-        return (
-          <span key={b.product} className={`chip shortage-${s}`} title={`${SHORTAGE_TEXT[s]}: ${fmt(-b.net)} t/min`}>
+        const content = (
+          <>
             <Icon path={p?.icon ?? null} size={18} />
             {p?.name}
             <span className="chip-amount">{fmt(b.net)}</span>
+          </>
+        );
+        const src = s === 'import' ? sourceFor(b.product) : null;
+        if (src) {
+          return (
+            <button
+              key={b.product}
+              type="button"
+              className={`chip shortage-${s} chip-action`}
+              title={`${SHORTAGE_TEXT[s]}: ${fmt(-b.net)} t/min. Click to add an auto route from ${src.name}.`}
+              onClick={() => onRoute(src, b.product)}
+            >
+              {content}
+              <span className="chip-hint">+ route from {src.name}</span>
+            </button>
+          );
+        }
+        return (
+          <span key={b.product} className={`chip shortage-${s}`} title={`${SHORTAGE_TEXT[s]}: ${fmt(-b.net)} t/min`}>
+            {content}
           </span>
         );
       })}
     </div>
+  );
+}
+
+function IslandRoutes({
+  island,
+  islands,
+  routes,
+  analysis,
+  onOpenTrade,
+}: {
+  island: Island;
+  islands: Island[];
+  routes: TradeRoute[];
+  analysis: Analysis;
+  onOpenTrade: () => void;
+}) {
+  const mine = routes.filter((r) => r.from === island.id || r.to === island.id);
+  const names = new Map(islands.map((i) => [i.id, i.name]));
+  const flows = new Map(analysis.flows.map((f) => [f.route.id, f]));
+  return (
+    <section className="panel">
+      <h3>Trade routes</h3>
+      {mine.length === 0 ? (
+        <p className="hint">This island has no routes. Click an amber “Missing” chip, or use the Trade routes page.</p>
+      ) : (
+        <ul className="route-list">
+          {mine.map((r) => {
+            const incoming = r.to === island.id;
+            const f = flows.get(r.id);
+            return (
+              <li key={r.id}>
+                <span className={`badge ${incoming ? 'pos' : 'warn'}`}>{incoming ? 'In' : 'Out'}</span>
+                <span className="label">
+                  <Icon path={productById.get(r.product)?.icon ?? null} size={18} />
+                  {productById.get(r.product)?.name}
+                </span>
+                <span className="muted">
+                  {incoming ? `from ${names.get(r.from)}` : `to ${names.get(r.to)}`} · {fmt(f?.actual ?? 0)} t/min
+                  {r.amount === null ? ' (auto)' : ''}
+                </span>
+                {f?.sourceShort && <span className="flag flag-short">source lacks surplus</span>}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      <div>
+        <button type="button" onClick={onOpenTrade}>
+          Manage routes
+        </button>
+      </div>
+    </section>
   );
 }
 

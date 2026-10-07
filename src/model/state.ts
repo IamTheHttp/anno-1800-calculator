@@ -1,6 +1,6 @@
 import { factoryById, game, levelById, productById, regionById, type Id } from './gameData';
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const APP_ID = 'anno1800-planner';
 
 export interface Island {
@@ -26,8 +26,19 @@ export interface Settings {
   revenue: Revenue;
 }
 
+/** A standing shipment of one good from one island to another. */
+export interface TradeRoute {
+  id: string;
+  from: string;
+  to: string;
+  product: Id;
+  /** Tons per minute; null = auto (what the destination lacks, up to the source's surplus). */
+  amount: number | null;
+}
+
 export interface PlannerState {
   islands: Island[];
+  routes: TradeRoute[];
   settings: Settings;
 }
 
@@ -45,6 +56,7 @@ export function newIsland(name: string, region: Id = game.regions[0].id): Island
 
 export const initialState = (): PlannerState => ({
   islands: [newIsland('Home island')],
+  routes: [],
   settings: { applyUnlocks: true, revenue: 'medium' },
 });
 
@@ -57,6 +69,9 @@ export type Action =
   | { type: 'removeIsland'; id: string }
   | { type: 'moveIsland'; id: string; delta: -1 | 1 }
   | { type: 'setSettings'; patch: Partial<Settings> }
+  | { type: 'addRoute'; route: TradeRoute }
+  | { type: 'updateRoute'; id: string; patch: Partial<Omit<TradeRoute, 'id'>> }
+  | { type: 'removeRoute'; id: string }
   | { type: 'replace'; state: PlannerState };
 
 const setCount = (rec: Record<string, number>, key: Id, value: number) => {
@@ -89,7 +104,11 @@ export function reducer(state: PlannerState, action: Action): PlannerState {
           : [...i.bonusNeeds, action.product],
       }));
     case 'removeIsland':
-      return { ...state, islands: state.islands.filter((i) => i.id !== action.id) };
+      return {
+        ...state,
+        islands: state.islands.filter((i) => i.id !== action.id),
+        routes: state.routes.filter((r) => r.from !== action.id && r.to !== action.id),
+      };
     case 'moveIsland': {
       const from = state.islands.findIndex((i) => i.id === action.id);
       const to = from + action.delta;
@@ -100,6 +119,12 @@ export function reducer(state: PlannerState, action: Action): PlannerState {
     }
     case 'setSettings':
       return { ...state, settings: { ...state.settings, ...action.patch } };
+    case 'addRoute':
+      return { ...state, routes: [...state.routes, action.route] };
+    case 'updateRoute':
+      return { ...state, routes: state.routes.map((r) => (r.id === action.id ? { ...r, ...action.patch } : r)) };
+    case 'removeRoute':
+      return { ...state, routes: state.routes.filter((r) => r.id !== action.id) };
     case 'replace':
       return action.state;
   }
@@ -161,10 +186,39 @@ export function parseExportFile(input: unknown): ParseResult {
     };
   });
 
+  const islandIds = new Set(islands.map((i) => i.id));
+  const routes: TradeRoute[] = [];
+  for (const [idx, r] of (Array.isArray(input.routes) ? input.routes : []).entries()) {
+    if (!isObject(r)) {
+      warnings.push(`Route #${idx + 1}: malformed, dropped.`);
+      continue;
+    }
+    const from = String(r.from);
+    const to = String(r.to);
+    const product = Number(r.product);
+    if (!islandIds.has(from) || !islandIds.has(to) || from === to) {
+      warnings.push(`Route #${idx + 1}: unknown or identical islands, dropped.`);
+      continue;
+    }
+    if (!productById.has(product)) {
+      warnings.push(`Route #${idx + 1}: unknown good ${String(r.product)}, dropped.`);
+      continue;
+    }
+    const amount = r.amount === null || r.amount === undefined ? null : Number(r.amount);
+    routes.push({
+      id: typeof r.id === 'string' && r.id ? r.id : newId(),
+      from,
+      to,
+      product,
+      amount: amount === null || !Number.isFinite(amount) || amount < 0 ? null : amount,
+    });
+  }
+
   const s = isObject(input.settings) ? input.settings : {};
   return {
     state: {
       islands,
+      routes,
       settings: {
         applyUnlocks: s.applyUnlocks !== false,
         revenue: REVENUES.includes(s.revenue as Revenue) ? (s.revenue as Revenue) : 'medium',
