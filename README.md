@@ -14,6 +14,14 @@ Working conditions, items, electricity, and trade unions are not modelled.
   for, through the full chain, vs. what is built. Goods from the other region
   (e.g. coffee for engineers) carry a region badge.
 - **Workforce** — workers the buildings need vs. residents of each tier.
+- **Shortage marks** — goods an island lacks are marked red when the whole
+  empire is short of them, and amber when another island has the surplus.
+  Marks appear in a "Missing" strip on the island, on resident need chips, on
+  building rows ("+N needed", output short, input short), on balance rows, and
+  as counts next to each island in the sidebar.
+- **Income** — coins per minute per island and for the empire: taxes minus
+  production-building upkeep. The "Revenue" difficulty setting in the top bar
+  adds its tax bonus. Tax tied to goods the empire lacks shows as "at risk".
 - **Empire overview** — all islands summed, plus a "what to build next" list.
   It assumes any surplus can reach any deficit.
 - **Supply chains** — the full tree behind N buildings of any good.
@@ -51,6 +59,10 @@ Delete `.data-src/` first to pull the latest upstream data.
 - A building makes `tpmin × output amount` tons per minute.
 - A tier consumes `residents × tpmin` tons per minute of each active need.
 - One resident provides one worker of its tier.
+- Each met need pays `MoneyValue / 10` coins per minute per full house, scaled
+  by occupancy, times `1 + Revenue bonus` (Plenty 25%, Medium 12.5%, Spare 0%).
+- Upkeep is each production building's coin maintenance. Public buildings,
+  warehouses, ships, and inactive-building costs are not counted.
 
 ## Deploy
 
@@ -65,7 +77,7 @@ Actions*. Pages on a private repository needs a paid GitHub plan.
   "app": "anno1800-planner",
   "version": 1,
   "exportedAt": "2026-10-07T12:00:00.000Z",
-  "settings": { "applyUnlocks": true },
+  "settings": { "applyUnlocks": true, "revenue": "medium" },
   "islands": [
     {
       "id": "k3j9x0aa",

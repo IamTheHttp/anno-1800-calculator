@@ -1,25 +1,37 @@
 import { useMemo } from 'react';
-import { empireBalance, empireRequiredBuildings, islandBalance, workforceBalance } from '../model/calc';
+import {
+  empireRequiredBuildings,
+  empireShortGoods,
+  islandBalance,
+  islandIncome,
+  shortages,
+  workforceBalance,
+  type Income,
+  type ProductBalance,
+} from '../model/calc';
 import { game, levelById } from '../model/gameData';
 import type { Island, Settings } from '../model/state';
 import { Empty, Icon, RegionBadge, Tabs } from './common';
-import { fmt } from './format';
+import { fmt, fmtSigned, signClass } from './format';
 import { usePref } from './usePref';
 import { BalanceTable, PlanTable } from './tables';
 
-type Tab = 'next' | 'balance' | 'plan';
+type Tab = 'next' | 'balance' | 'plan' | 'income';
 
 export function EmpireView({
   islands,
   settings,
+  empire: balance,
   onOpenIsland,
 }: {
   islands: Island[];
   settings: Settings;
+  empire: ProductBalance[];
   onOpenIsland: (id: string) => void;
 }) {
   const [tab, setTab] = usePref<Tab>('empireTab', 'next');
-  const balance = useMemo(() => empireBalance(islands, settings), [islands, settings]);
+  const short = useMemo(() => empireShortGoods(balance), [balance]);
+  const incomes = useMemo(() => islands.map((i) => islandIncome(i, settings, short)), [islands, settings, short]);
   const plan = useMemo(() => empireRequiredBuildings(islands, settings), [islands, settings]);
 
   return (
@@ -28,7 +40,7 @@ export function EmpireView({
       <p className="lede">
         All islands together, as if every surplus could reach every deficit. Trade routes are not modelled yet.
       </p>
-      <IslandSummary islands={islands} settings={settings} onOpenIsland={onOpenIsland} />
+      <IslandSummary islands={islands} settings={settings} empire={balance} incomes={incomes} onOpenIsland={onOpenIsland} />
       <Tabs<Tab>
         active={tab}
         onChange={setTab}
@@ -36,11 +48,13 @@ export function EmpireView({
           { id: 'next', label: 'What to build next' },
           { id: 'balance', label: 'Balance' },
           { id: 'plan', label: 'Needs plan' },
+          { id: 'income', label: 'Income' },
         ]}
       />
       {tab === 'next' && <PlanTable rows={plan} onlyMissing />}
       {tab === 'balance' && <BalanceTable rows={balance} region={game.regions[0].id} />}
       {tab === 'plan' && <PlanTable rows={plan} />}
+      {tab === 'income' && <EmpireIncome islands={islands} incomes={incomes} onOpenIsland={onOpenIsland} />}
     </section>
   );
 }
@@ -48,10 +62,14 @@ export function EmpireView({
 function IslandSummary({
   islands,
   settings,
+  empire,
+  incomes,
   onOpenIsland,
 }: {
   islands: Island[];
   settings: Settings;
+  empire: ProductBalance[];
+  incomes: Income[];
   onOpenIsland: (id: string) => void;
 }) {
   if (islands.length === 0) return <Empty>No islands yet.</Empty>;
@@ -63,13 +81,18 @@ function IslandSummary({
             <th>Island</th>
             <th>Population</th>
             <th className="num">Buildings</th>
-            <th className="num">Deficits</th>
+            <th className="num" title="Short across the empire">Short</th>
+            <th className="num" title="Short here; another island has a surplus">Import</th>
             <th className="num">Workforce short</th>
+            <th className="num">Coins / min</th>
           </tr>
         </thead>
         <tbody>
-          {islands.map((i) => {
-            const deficits = islandBalance(i, settings).filter((b) => b.net < -1e-4).length;
+          {islands.map((i, idx) => {
+            const s = [...shortages(islandBalance(i, settings), empire).values()];
+            const shortCount = s.filter((x) => x === 'short').length;
+            const importCount = s.length - shortCount;
+            const net = incomes[idx].net;
             const short = workforceBalance(i).filter((w) => w.available < w.required).length;
             return (
               <tr key={i.id} className="clickable" onClick={() => onOpenIsland(i.id)}>
@@ -92,13 +115,74 @@ function IslandSummary({
                   </span>
                 </td>
                 <td className="num">{Object.values(i.buildings).reduce((s, n) => s + n, 0)}</td>
-                <td className={`num ${deficits ? 'neg' : 'pos'}`}>{deficits}</td>
-                <td className={`num ${short ? 'neg' : 'pos'}`}>{short}</td>
+                <td className={`num ${shortCount ? 'neg' : 'zero'}`}>{shortCount}</td>
+                <td className={`num ${importCount ? 'warn' : 'zero'}`}>{importCount}</td>
+                <td className={`num ${short ? 'neg' : 'zero'}`}>{short}</td>
+                <td className={`num ${signClass(net)}`}>{fmtSigned(net, 0)}</td>
               </tr>
             );
           })}
         </tbody>
       </table>
     </div>
+  );
+}
+
+function EmpireIncome({
+  islands,
+  incomes,
+  onOpenIsland,
+}: {
+  islands: Island[];
+  incomes: Income[];
+  onOpenIsland: (id: string) => void;
+}) {
+  if (islands.length === 0) return <Empty>No islands yet.</Empty>;
+  const sum = (k: 'taxes' | 'maintenance' | 'atRisk' | 'net') => incomes.reduce((s, i) => s + i[k], 0);
+  return (
+    <>
+      <p className="lede">
+        Coins per minute with every unlocked need met, including the Revenue difficulty bonus. Public buildings, warehouses and
+        ships are not counted.
+      </p>
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Island</th>
+              <th className="num">Taxes</th>
+              <th className="num">Upkeep</th>
+              <th className="num">Balance</th>
+              <th className="num" title="Tax tied to goods the empire is short of">At risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            {islands.map((i, idx) => {
+              const inc = incomes[idx];
+              return (
+                <tr key={i.id} className="clickable" onClick={() => onOpenIsland(i.id)}>
+                  <td>
+                    <span className="label strong">
+                      {i.name} <RegionBadge id={i.region} />
+                    </span>
+                  </td>
+                  <td className="num">{fmt(inc.taxes, 0)}</td>
+                  <td className="num">{fmt(inc.maintenance, 0)}</td>
+                  <td className={`num strong ${signClass(inc.net)}`}>{fmtSigned(inc.net, 0)}</td>
+                  <td className={`num ${inc.atRisk > 0 ? 'neg' : 'zero'}`}>{inc.atRisk > 0 ? `−${fmt(inc.atRisk, 0)}` : '—'}</td>
+                </tr>
+              );
+            })}
+            <tr className="total">
+              <td>Empire</td>
+              <td className="num">{fmt(sum('taxes'), 0)}</td>
+              <td className="num">{fmt(sum('maintenance'), 0)}</td>
+              <td className={`num strong ${signClass(sum('net'))}`}>{fmtSigned(sum('net'), 0)}</td>
+              <td className={`num ${sum('atRisk') > 0 ? 'neg' : 'zero'}`}>{sum('atRisk') > 0 ? `−${fmt(sum('atRisk'), 0)}` : '—'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }

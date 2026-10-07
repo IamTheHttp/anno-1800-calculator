@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   collectBuildings,
+  empireShortGoods,
+  islandIncome,
+  shortages,
   empireBalance,
   empireRequiredBuildings,
   islandBalance,
@@ -31,8 +34,8 @@ const NW_LUMBERJACK = 101260;
 const OW_LUMBERJACK = 1010266;
 const SUGAR_CANE = 1010329;
 
-const unlocks: Settings = { applyUnlocks: true };
-const noUnlocks: Settings = { applyUnlocks: false };
+const unlocks: Settings = { applyUnlocks: true, revenue: 'spare' };
+const noUnlocks: Settings = { applyUnlocks: false, revenue: 'spare' };
 
 const island = (patch: Partial<Island>): Island => ({ ...newIsland('Test', OLD_WORLD), ...patch });
 const byProduct = <T extends { product: number }>(xs: T[], id: number) => xs.find((x) => x.product === id);
@@ -139,5 +142,51 @@ describe('workforceBalance', () => {
     const farmers = workforceBalance(i).find((w) => w.workforce === 1010052)!;
     expect(farmers.required).toBe(50);
     expect(farmers.available).toBe(30);
+  });
+});
+
+describe('shortages', () => {
+  it('marks a deficit as import when another island has the surplus', () => {
+    const a = island({ residents: { [FARMERS]: 800 } });
+    const b = island({ buildings: { [FISHERY]: 2 } });
+    const empire = empireBalance([a, b], unlocks);
+    expect(shortages(islandBalance(a, unlocks), empire).get(FISH)).toBe('import');
+  });
+
+  it('marks a deficit as short when the empire lacks the good', () => {
+    const a = island({ residents: { [FARMERS]: 800 } });
+    const empire = empireBalance([a], unlocks);
+    expect(shortages(islandBalance(a, unlocks), empire).get(FISH)).toBe('short');
+    expect(empireShortGoods(empire).has(FISH)).toBe(true);
+  });
+});
+
+describe('islandIncome', () => {
+  it('pays MoneyValue / 10 per full farmer house', () => {
+    // 150 farmers = 15 full houses; fish 10 + schnapps 30 + work clothes 30 + pub 12 = 82 → 8.2 per house.
+    const inc = islandIncome(island({ residents: { [FARMERS]: 150 } }), unlocks);
+    expect(inc.taxes).toBeCloseTo(15 * 8.2, 6);
+  });
+
+  it('applies the revenue bonus to taxes only', () => {
+    const i = island({ residents: { [FARMERS]: 150 }, buildings: { [FISHERY]: 1 } });
+    const spare = islandIncome(i, unlocks);
+    const plenty = islandIncome(i, { ...unlocks, revenue: 'plenty' });
+    expect(plenty.taxes).toBeCloseTo(spare.taxes * 1.25, 6);
+    expect(plenty.maintenance).toBe(40);
+    expect(plenty.net).toBeCloseTo(plenty.taxes - 40, 6);
+  });
+
+  it('skips locked needs and unticked bonus needs', () => {
+    const small = islandIncome(island({ residents: { [FARMERS]: 60 } }), unlocks);
+    // Only fish is unlocked at 60 farmers: 6 houses × 1.
+    expect(small.taxes).toBeCloseTo(6, 6);
+    const rum = island({ residents: { [WORKERS]: 1000 } });
+    expect(islandIncome({ ...rum, bonusNeeds: [RUM] }, unlocks).taxes).toBeGreaterThan(islandIncome(rum, unlocks).taxes);
+  });
+
+  it('reports taxes at risk from goods the empire lacks', () => {
+    const inc = islandIncome(island({ residents: { [FARMERS]: 150 } }), unlocks, new Set([FISH]));
+    expect(inc.atRisk).toBeCloseTo(15, 6);
   });
 });

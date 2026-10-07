@@ -29,6 +29,8 @@ export interface Factory {
   inputs: Flow[];
   outputs: Flow[];
   workforce: { type: Id; amount: number };
+  /** Coin upkeep per minute. */
+  maintenance: number;
 }
 
 export interface Need {
@@ -40,6 +42,8 @@ export interface Need {
   /** Residents of this tier on the island before the need appears. */
   unlockAt: number | null;
   bonus: boolean;
+  /** The game's MoneyValue: tax per full house is money / 10. */
+  money: number;
 }
 
 export interface PopulationLevel {

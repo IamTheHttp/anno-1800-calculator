@@ -1,5 +1,6 @@
 // Builds src/data/game-data.json and src/data/icons.json from the
-// Anno1800Calculator params file (MIT, see THIRD_PARTY_NOTICES.md).
+// Anno1800Calculator params file and the anno-toolkit population assets
+// (both MIT, see THIRD_PARTY_NOTICES.md).
 // Scope: base game only — every entity tagged with a DLC is dropped.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,6 +9,8 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')
 const SRC_DIR = path.join(ROOT, '.data-src');
 const PARAMS = path.join(SRC_DIR, 'params.js');
 const PARAMS_URL = 'https://raw.githubusercontent.com/NiHoel/Anno1800Calculator/master/js/params.js';
+const POP_LEVELS = path.join(SRC_DIR, 'populationlevel7.json');
+const POP_LEVELS_URL = 'https://raw.githubusercontent.com/jansepke/anno-toolkit/main/data/anno/assets/populationlevel7.json';
 const OUT_DIR = path.join(ROOT, 'src', 'data');
 
 const OLD_WORLD = 5000000;
@@ -18,13 +21,16 @@ const REGIONS = new Set([OLD_WORLD, NEW_WORLD]);
 // in the source, so they are identified by their guid range instead.
 const isHighLifeNeed = (guid) => guid >= 135000 && guid < 136000;
 
+async function download(url, file) {
+  if (fs.existsSync(file)) return;
+  fs.mkdirSync(SRC_DIR, { recursive: true });
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`fetch ${url}: ${res.status}`);
+  fs.writeFileSync(file, await res.text());
+}
+
 async function loadParams() {
-  if (!fs.existsSync(PARAMS)) {
-    fs.mkdirSync(SRC_DIR, { recursive: true });
-    const res = await fetch(PARAMS_URL);
-    if (!res.ok) throw new Error(`fetch ${PARAMS_URL}: ${res.status}`);
-    fs.writeFileSync(PARAMS, await res.text());
-  }
+  await download(PARAMS_URL, PARAMS);
   const window = {};
   new Function('window', fs.readFileSync(PARAMS, 'utf8'))(window);
   return window.params;
@@ -34,6 +40,17 @@ const en = (x) => x?.locaText?.english ?? x?.name;
 const hasDlc = (x) => Array.isArray(x?.dlcs) && x.dlcs.length > 0;
 
 const p = await loadParams();
+await download(POP_LEVELS_URL, POP_LEVELS);
+// MoneyValue per (population level, need product), from the game assets.
+const moneyValue = new Map(
+  JSON.parse(fs.readFileSync(POP_LEVELS, 'utf8')).flatMap((a) =>
+    (a.Values.PopulationLevel7?.PopulationInputs?.Item ?? []).map((i) => [
+      `${a.Values.Standard.GUID}:${i.Product}`,
+      i.MoneyValue ?? 0,
+    ]),
+  ),
+);
+const COINS = 1010017;
 const productById = new Map(p.products.map((x) => [x.guid, x]));
 const usedProducts = new Set();
 const usedIcons = new Set();
@@ -68,6 +85,7 @@ const factories = p.factories
       inputs,
       outputs,
       workforce: { type: wf.Product, amount: wf.Amount },
+      maintenance: f.maintenances.find((m) => m.Product === COINS)?.Amount ?? 0,
     };
   });
 
@@ -85,6 +103,7 @@ const populationLevels = p.populationLevels
           residents: n.residents ?? 0,
           unlockAt: unlock && unlock.populationLevel === l.guid ? unlock.amount : null,
           bonus: n.isBonusNeed === 1,
+          money: moneyValue.get(`${l.guid}:${n.guid}`) ?? 0,
         };
       });
     return { id: l.guid, name: en(l), region: l.region, icon: icon(l), fullHouse: l.fullHouse, needs };

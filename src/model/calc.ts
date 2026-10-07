@@ -9,7 +9,7 @@ import {
   type Need,
   type PopulationLevel,
 } from './gameData';
-import type { Island, Settings } from './state';
+import type { Island, Revenue, Settings } from './state';
 
 export type Rates = Map<Id, number>;
 
@@ -183,3 +183,80 @@ export function workforceBalance(island: Island): WorkforceBalance[] {
 
 /** Houses a tier needs for `residents` with every need met. */
 export const housesFor = (level: PopulationLevel, residents: number) => Math.ceil(residents / level.fullHouse);
+
+/** Island-level shortage of a good: `import` when another island has the surplus, `short` when the empire lacks it. */
+export type Shortage = 'import' | 'short';
+
+export function shortages(island: ProductBalance[], empire: ProductBalance[]): Map<Id, Shortage> {
+  const empireNet = new Map(empire.map((b) => [b.product, b.net]));
+  const out = new Map<Id, Shortage>();
+  for (const b of island) {
+    if (b.net >= -EPS) continue;
+    out.set(b.product, (empireNet.get(b.product) ?? b.net) < -EPS ? 'short' : 'import');
+  }
+  return out;
+}
+
+/** Products the whole empire produces less of than it uses. */
+export const empireShortGoods = (empire: ProductBalance[]) =>
+  new Set(empire.filter((b) => b.net < -EPS).map((b) => b.product));
+
+export const EPS = 1e-4;
+
+export const REVENUE_BONUS: Record<Revenue, number> = { plenty: 0.25, medium: 0.125, spare: 0 };
+
+/** Needs that pay taxes: goods and services, after unlocks and bonus choices. */
+export function taxedNeeds(level: PopulationLevel, residents: number, island: Island, settings: Settings): Need[] {
+  return level.needs.filter(
+    (n) =>
+      n.money > 0 &&
+      (!n.bonus || island.bonusNeeds.includes(n.product)) &&
+      (!settings.applyUnlocks || n.unlockAt === null || residents >= n.unlockAt),
+  );
+}
+
+export interface TierIncome {
+  level: Id;
+  residents: number;
+  /** Taxes with every need met, difficulty bonus included. */
+  taxes: number;
+  /** Part of `taxes` that depends on goods the empire is short of. */
+  atRisk: number;
+}
+
+export interface Income {
+  tiers: TierIncome[];
+  taxes: number;
+  atRisk: number;
+  maintenance: number;
+  /** taxes − maintenance. */
+  net: number;
+}
+
+/**
+ * Coins per minute: taxes (MoneyValue / 10 per full house, scaled by
+ * occupancy, plus the Revenue bonus) minus production-building upkeep.
+ * Public buildings, warehouses and ships are not counted.
+ */
+export function islandIncome(island: Island, settings: Settings, shortGoods: Set<Id> = new Set()): Income {
+  const factor = 1 + REVENUE_BONUS[settings.revenue];
+  const tiers: TierIncome[] = [];
+  for (const [levelId, residents] of Object.entries(island.residents)) {
+    const level = levelById.get(Number(levelId));
+    if (!level || residents <= 0) continue;
+    const houses = residents / level.fullHouse;
+    let taxes = 0;
+    let atRisk = 0;
+    for (const n of taxedNeeds(level, residents, island, settings)) {
+      const t = (n.money / 10) * houses * factor;
+      taxes += t;
+      if (shortGoods.has(n.product)) atRisk += t;
+    }
+    tiers.push({ level: level.id, residents, taxes, atRisk });
+  }
+  let maintenance = 0;
+  for (const [fid, count] of Object.entries(island.buildings)) maintenance += (factoryById.get(Number(fid))?.maintenance ?? 0) * count;
+  const taxes = tiers.reduce((s, t) => s + t.taxes, 0);
+  const atRisk = tiers.reduce((s, t) => s + t.atRisk, 0);
+  return { tiers, taxes, atRisk, maintenance, net: taxes - maintenance };
+}

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ceilWhole, type BuildingPlan, type ProductBalance, type WorkforceBalance } from '../model/calc';
-import { outputRate, producerFor, workforceById, type Id } from '../model/gameData';
+import { ceilWhole, type BuildingPlan, type Income, type ProductBalance, type Shortage, type WorkforceBalance } from '../model/calc';
+import { levelById, outputRate, producerFor, workforceById, type Id } from '../model/gameData';
 import { Empty, Icon, ProductLabel, RegionBadge } from './common';
 import { fmt, fmtSigned, signClass } from './format';
 
@@ -10,7 +10,16 @@ const asBuildings = (product: Id, net: number, region: Id) => {
   return f ? net / outputRate(f) : null;
 };
 
-export function BalanceTable({ rows, region }: { rows: ProductBalance[]; region: Id }) {
+export function BalanceTable({
+  rows,
+  region,
+  shortage,
+}: {
+  rows: ProductBalance[];
+  region: Id;
+  /** Island shortages; without it, any deficit counts as short. */
+  shortage?: Map<Id, Shortage>;
+}) {
   const [deficitsOnly, setDeficitsOnly] = useState(false);
   const sorted = useMemo(
     () =>
@@ -46,8 +55,9 @@ export function BalanceTable({ rows, region }: { rows: ProductBalance[]; region:
             <tbody>
               {sorted.map((r) => {
                 const b = asBuildings(r.product, r.net, region);
+                const s = shortage ? shortage.get(r.product) : r.net < -1e-4 ? 'short' : undefined;
                 return (
-                  <tr key={r.product}>
+                  <tr key={r.product} className={s ? `row-${s}` : ''}>
                     <td>
                       <ProductLabel id={r.product} />
                     </td>
@@ -92,7 +102,7 @@ export function PlanTable({
         </thead>
         <tbody>
           {shown.map((r) => (
-            <tr key={r.factory.id}>
+            <tr key={r.factory.id} className={r.missing > 0 ? 'row-short' : ''}>
               <td>
                 <span className="label">
                   <Icon path={r.factory.icon} />
@@ -146,6 +156,56 @@ export function WorkforceTable({ rows }: { rows: WorkforceBalance[] }) {
               </tr>
             );
           })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export function IncomeTable({ income }: { income: Income }) {
+  if (income.tiers.length === 0 && income.maintenance === 0) return <Empty>No residents or buildings yet.</Empty>;
+  return (
+    <div className="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th className="num">Residents</th>
+            <th className="num">Coins / min</th>
+            <th className="num" title="Tax tied to goods the empire is short of">At risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          {income.tiers.map((t) => {
+            const l = levelById.get(t.level)!;
+            return (
+              <tr key={t.level}>
+                <td>
+                  <span className="label">
+                    <Icon path={l.icon} />
+                    {l.name} taxes
+                  </span>
+                </td>
+                <td className="num">{fmt(t.residents, 0)}</td>
+                <td className="num pos">{fmtSigned(t.taxes, 0)}</td>
+                <td className={`num ${t.atRisk > 0 ? 'neg' : 'zero'}`}>{t.atRisk > 0 ? `−${fmt(t.atRisk, 0)}` : '—'}</td>
+              </tr>
+            );
+          })}
+          <tr>
+            <td>Production building upkeep</td>
+            <td />
+            <td className="num neg">{income.maintenance > 0 ? `−${fmt(income.maintenance, 0)}` : '0'}</td>
+            <td />
+          </tr>
+          <tr className="total">
+            <td>Balance</td>
+            <td />
+            <td className={`num strong ${signClass(income.net)}`}>{fmtSigned(income.net, 0)}</td>
+            <td className={`num ${income.atRisk > 0 ? 'neg' : 'zero'}`}>
+              {income.atRisk > 0 ? `${fmtSigned(income.net - income.atRisk, 0)} if unsupplied` : '—'}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

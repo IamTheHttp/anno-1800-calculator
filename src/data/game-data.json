@@ -82,56 +82,64 @@
      "tpmin": null,
      "residents": 5,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010200,
      "tpmin": 0.0025000002,
      "residents": 3,
      "unlockAt": 50,
-     "bonus": false
+     "bonus": false,
+     "money": 10
     },
     {
      "product": 1010216,
      "tpmin": 0.003333336,
      "residents": 0,
      "unlockAt": 100,
-     "bonus": false
+     "bonus": false,
+     "money": 30
     },
     {
      "product": 1010237,
      "tpmin": 0.003076926,
      "residents": 2,
      "unlockAt": 100,
-     "bonus": false
+     "bonus": false,
+     "money": 30
     },
     {
      "product": 1010349,
      "tpmin": null,
      "residents": 0,
      "unlockAt": 150,
-     "bonus": false
+     "bonus": false,
+     "money": 12
     },
     {
      "product": 1010235,
      "tpmin": 0.0024000000000000002,
      "residents": 1,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 10
     },
     {
      "product": 1010239,
      "tpmin": 0.0012000000000000001,
      "residents": 1,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 19
     },
     {
      "product": 1010203,
      "tpmin": 0.00034999998,
      "residents": 1,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 15
     }
    ]
   },
@@ -147,98 +155,112 @@
      "tpmin": null,
      "residents": 5,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010200,
      "tpmin": 0.0025000002,
      "residents": 3,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 10
     },
     {
      "product": 1010216,
      "tpmin": 0.003333336,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 30
     },
     {
      "product": 1010237,
      "tpmin": 0.003076926,
      "residents": 2,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 30
     },
     {
      "product": 1010349,
      "tpmin": null,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 12
     },
     {
      "product": 1010238,
      "tpmin": 0.001000002,
      "residents": 3,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 20
     },
     {
      "product": 1010213,
      "tpmin": 0.0009090899999999999,
      "residents": 3,
      "unlockAt": 150,
-     "bonus": false
+     "bonus": false,
+     "money": 20
     },
     {
      "product": 1010350,
      "tpmin": null,
      "residents": 0,
      "unlockAt": 150,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010203,
      "tpmin": 0.000416667,
      "residents": 2,
      "unlockAt": 300,
-     "bonus": false
+     "bonus": false,
+     "money": 20
     },
     {
      "product": 1010214,
      "tpmin": 0.00076923,
      "residents": 0,
      "unlockAt": 500,
-     "bonus": false
+     "bonus": false,
+     "money": 50
     },
     {
      "product": 1010351,
      "tpmin": null,
      "residents": 2,
      "unlockAt": 750,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010257,
      "tpmin": 0.0009999999,
      "residents": 2,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 12
     },
     {
      "product": 1010245,
      "tpmin": 0.00039999990000000004,
      "residents": 4,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 16
     },
     {
      "product": 1010193,
      "tpmin": 0.0006249999,
      "residents": 2,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 25
     }
    ]
   },
@@ -254,98 +276,112 @@
      "tpmin": 0.001333334,
      "residents": 6,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 40
     },
     {
      "product": 1010213,
      "tpmin": 0.001212122,
      "residents": 6,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 40
     },
     {
      "product": 1010350,
      "tpmin": null,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010203,
      "tpmin": 0.000555556,
      "residents": 4,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 40
     },
     {
      "product": 1010214,
      "tpmin": 0.001025642,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 100
     },
     {
      "product": 1010351,
      "tpmin": null,
      "residents": 4,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010217,
      "tpmin": 0.00034188,
      "residents": 4,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 20
     },
     {
      "product": 1010206,
      "tpmin": 0.00095238,
      "residents": 2,
      "unlockAt": 250,
-     "bonus": false
+     "bonus": false,
+     "money": 40
     },
     {
      "product": 1010352,
      "tpmin": null,
      "residents": 0,
      "unlockAt": 250,
-     "bonus": false
+     "bonus": false,
+     "money": 20
     },
     {
      "product": 1010257,
      "tpmin": 0.001904762,
      "residents": 0,
      "unlockAt": 500,
-     "bonus": false
+     "bonus": false,
+     "money": 50
     },
     {
      "product": 1010247,
      "tpmin": 0.0008888879999999999,
      "residents": 2,
      "unlockAt": 900,
-     "bonus": false
+     "bonus": false,
+     "money": 60
     },
     {
      "product": 1010353,
      "tpmin": null,
      "residents": 2,
      "unlockAt": 1500,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010197,
      "tpmin": 0.002,
      "residents": 1,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 0
     },
     {
      "product": 1010201,
      "tpmin": 0.002666666,
      "residents": 1,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 25
     }
    ]
   },
@@ -361,105 +397,120 @@
      "tpmin": 0.00051282,
      "residents": 12,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 40
     },
     {
      "product": 1010206,
      "tpmin": 0.0014285715,
      "residents": 6,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 80
     },
     {
      "product": 1010352,
      "tpmin": null,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 20
     },
     {
      "product": 1010257,
      "tpmin": 0.002857143,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 100
     },
     {
      "product": 1010247,
      "tpmin": 0.0013333335,
      "residents": 6,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 120
     },
     {
      "product": 1010353,
      "tpmin": null,
      "residents": 6,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 120030,
      "tpmin": 0.000222222,
      "residents": 4,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 50
     },
     {
      "product": 1010245,
      "tpmin": 0.0006250005000000001,
      "residents": 0,
      "unlockAt": 500,
-     "bonus": false
+     "bonus": false,
+     "money": 70
     },
     {
      "product": 120032,
      "tpmin": 0.0011764710000000001,
      "residents": 2,
      "unlockAt": 1000,
-     "bonus": false
+     "bonus": false,
+     "money": 40
     },
     {
      "product": 1010246,
      "tpmin": 0.0001960785,
      "residents": 0,
      "unlockAt": 1000,
-     "bonus": false
+     "bonus": false,
+     "money": 90
     },
     {
      "product": 1010354,
      "tpmin": null,
      "residents": 2,
      "unlockAt": 1750,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010208,
      "tpmin": 0.0003124995,
      "residents": 2,
      "unlockAt": 1750,
-     "bonus": false
+     "bonus": false,
+     "money": 70
     },
     {
      "product": 1010356,
      "tpmin": null,
      "residents": 0,
      "unlockAt": 3000,
-     "bonus": false
+     "bonus": false,
+     "money": 100
     },
     {
      "product": 1010203,
      "tpmin": 0.0007812501,
      "residents": 2,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 15
     },
     {
      "product": 1010258,
      "tpmin": 0.000375,
      "residents": 2,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 36
     }
    ]
   },
@@ -475,105 +526,120 @@
      "tpmin": 0.0003555552,
      "residents": 16,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 100
     },
     {
      "product": 1010245,
      "tpmin": 0.0009999995999999999,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 140
     },
     {
      "product": 120032,
      "tpmin": 0.0018823524,
      "residents": 8,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 80
     },
     {
      "product": 1010246,
      "tpmin": 0.0003137256,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 180
     },
     {
      "product": 1010354,
      "tpmin": null,
      "residents": 8,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010208,
      "tpmin": 0.0005000004,
      "residents": 8,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 140
     },
     {
      "product": 1010356,
      "tpmin": null,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 200
     },
     {
      "product": 120016,
      "tpmin": 0.0004704,
      "residents": 2,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 50
     },
     {
      "product": 1010259,
      "tpmin": 0.000444444,
      "residents": 2,
      "unlockAt": 750,
-     "bonus": false
+     "bonus": false,
+     "money": 50
     },
     {
      "product": 1010355,
      "tpmin": null,
      "residents": 0,
      "unlockAt": 750,
-     "bonus": false
+     "bonus": false,
+     "money": 50
     },
     {
      "product": 1010258,
      "tpmin": 0.0010666668,
      "residents": 2,
      "unlockAt": 1750,
-     "bonus": false
+     "bonus": false,
+     "money": 50
     },
     {
      "product": 1010250,
      "tpmin": 0.00042105239999999997,
      "residents": 0,
      "unlockAt": 1750,
-     "bonus": false
+     "bonus": false,
+     "money": 250
     },
     {
      "product": 1010248,
      "tpmin": 0.00010524,
      "residents": 0,
      "unlockAt": 3000,
-     "bonus": false
+     "bonus": false,
+     "money": 150
     },
     {
      "product": 1010225,
      "tpmin": 0.00013333319999999998,
      "residents": 4,
      "unlockAt": 5000,
-     "bonus": false
+     "bonus": false,
+     "money": 300
     },
     {
      "product": 1010209,
      "tpmin": 0.00032000004,
      "residents": 3,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 6
     }
    ]
   },
@@ -589,56 +655,64 @@
      "tpmin": null,
      "residents": 5,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 120033,
      "tpmin": 0.00285714,
      "residents": 3,
      "unlockAt": 50,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 1010257,
      "tpmin": 0.00142857,
      "residents": 0,
      "unlockAt": 100,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 120043,
      "tpmin": 0.0025000020000000003,
      "residents": 2,
      "unlockAt": 200,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 120050,
      "tpmin": null,
      "residents": 0,
      "unlockAt": 300,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 1010216,
      "tpmin": 0.003333336,
      "residents": 4,
      "unlockAt": 300,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 1010237,
      "tpmin": 0.0015,
      "residents": 2,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 11
     },
     {
      "product": 120044,
      "tpmin": 0.00225,
      "residents": 1,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 14
     }
    ]
   },
@@ -654,91 +728,104 @@
      "tpmin": null,
      "residents": 5,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 120033,
      "tpmin": 0.002857143,
      "residents": 3,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 1010257,
      "tpmin": 0.001428573,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 120043,
      "tpmin": 0.002499999,
      "residents": 2,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 120050,
      "tpmin": null,
      "residents": 0,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 0
     },
     {
      "product": 120035,
      "tpmin": 0.00142857,
      "residents": 4,
      "unlockAt": null,
-     "bonus": false
+     "bonus": false,
+     "money": 10
     },
     {
      "product": 120032,
      "tpmin": 0.0005882369999999999,
      "residents": 2,
      "unlockAt": 300,
-     "bonus": false
+     "bonus": false,
+     "money": 10
     },
     {
      "product": 1010348,
      "tpmin": null,
      "residents": 0,
      "unlockAt": 300,
-     "bonus": false
+     "bonus": false,
+     "money": 10
     },
     {
      "product": 120037,
      "tpmin": 0.001333332,
      "residents": 2,
      "unlockAt": 600,
-     "bonus": false
+     "bonus": false,
+     "money": 10
     },
     {
      "product": 1010214,
      "tpmin": 0.001333332,
      "residents": 0,
      "unlockAt": 600,
-     "bonus": false
+     "bonus": false,
+     "money": 30
     },
     {
      "product": 1010259,
      "tpmin": 0.000555555,
      "residents": 0,
      "unlockAt": 1000,
-     "bonus": false
+     "bonus": false,
+     "money": 35
     },
     {
      "product": 1010206,
      "tpmin": 0.0012500010000000002,
      "residents": 2,
      "unlockAt": 1000,
-     "bonus": false
+     "bonus": false,
+     "money": 25
     },
     {
      "product": 120030,
      "tpmin": 0.00039999990000000004,
      "residents": 1,
      "unlockAt": null,
-     "bonus": true
+     "bonus": true,
+     "money": 5
     }
    ]
   }
@@ -760,7 +847,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 20
-   }
+   },
+   "maintenance": 20
   },
   {
    "id": 1010263,
@@ -778,7 +866,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 20
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010264,
@@ -796,7 +885,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 20
-   }
+   },
+   "maintenance": 20
   },
   {
    "id": 1010265,
@@ -814,7 +904,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 20
-   }
+   },
+   "maintenance": 20
   },
   {
    "id": 1010266,
@@ -832,7 +923,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 5
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 1010267,
@@ -850,7 +942,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 10
-   }
+   },
+   "maintenance": 20
   },
   {
    "id": 1010269,
@@ -868,7 +961,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 30
-   }
+   },
+   "maintenance": 40
   },
   {
    "id": 1010558,
@@ -886,7 +980,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 10
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 100654,
@@ -904,7 +999,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 10
-   }
+   },
+   "maintenance": 100
   },
   {
    "id": 100655,
@@ -922,7 +1018,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 10
-   }
+   },
+   "maintenance": 200
   },
   {
    "id": 1010278,
@@ -940,7 +1037,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 25
-   }
+   },
+   "maintenance": 40
   },
   {
    "id": 1010310,
@@ -958,7 +1056,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 500
   },
   {
    "id": 1010560,
@@ -976,7 +1075,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 120
   },
   {
    "id": 1010280,
@@ -1003,7 +1103,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 75
-   }
+   },
+   "maintenance": 400
   },
   {
    "id": 1010281,
@@ -1026,7 +1127,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010283,
@@ -1049,7 +1151,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 20
   },
   {
    "id": 100451,
@@ -1072,7 +1175,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 10
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 1010325,
@@ -1099,7 +1203,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 200
-   }
+   },
+   "maintenance": 500
   },
   {
    "id": 1010286,
@@ -1126,7 +1231,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 150
-   }
+   },
+   "maintenance": 1000
   },
   {
    "id": 1010285,
@@ -1153,7 +1259,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 100
-   }
+   },
+   "maintenance": 200
   },
   {
    "id": 1010288,
@@ -1176,7 +1283,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 75
   },
   {
    "id": 100416,
@@ -1194,7 +1302,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 1010289,
@@ -1221,7 +1330,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 150
-   }
+   },
+   "maintenance": 1200
   },
   {
    "id": 1010291,
@@ -1244,7 +1354,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 60
   },
   {
    "id": 1010292,
@@ -1271,7 +1382,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 75
-   }
+   },
+   "maintenance": 200
   },
   {
    "id": 1010293,
@@ -1298,7 +1410,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 75
-   }
+   },
+   "maintenance": 100
   },
   {
    "id": 1010295,
@@ -1325,7 +1438,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 75
-   }
+   },
+   "maintenance": 100
   },
   {
    "id": 1010294,
@@ -1348,7 +1462,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 50
-   }
+   },
+   "maintenance": 40
   },
   {
    "id": 1010316,
@@ -1371,7 +1486,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 80
   },
   {
    "id": 100659,
@@ -1398,7 +1514,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 150
-   }
+   },
+   "maintenance": 1000
   },
   {
    "id": 1010296,
@@ -1421,7 +1538,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 200
-   }
+   },
+   "maintenance": 200
   },
   {
    "id": 1010297,
@@ -1448,7 +1566,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 100
-   }
+   },
+   "maintenance": 100
   },
   {
    "id": 1010298,
@@ -1466,7 +1585,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 10
-   }
+   },
+   "maintenance": 20
   },
   {
    "id": 1010299,
@@ -1489,7 +1609,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 150
   },
   {
    "id": 1010301,
@@ -1516,7 +1637,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 250
-   }
+   },
+   "maintenance": 2200
   },
   {
    "id": 1010302,
@@ -1543,7 +1665,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 250
-   }
+   },
+   "maintenance": 1800
   },
   {
    "id": 1010303,
@@ -1570,7 +1693,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 500
-   }
+   },
+   "maintenance": 3000
   },
   {
    "id": 1010282,
@@ -1597,7 +1721,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 101331,
@@ -1615,7 +1740,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 100
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 1010304,
@@ -1633,7 +1759,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010305,
@@ -1651,7 +1778,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 50
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010307,
@@ -1669,7 +1797,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 1010308,
@@ -1687,7 +1816,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 1010309,
@@ -1705,7 +1835,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 1010312,
@@ -1728,7 +1859,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 40
-   }
+   },
+   "maintenance": 40
   },
   {
    "id": 1010313,
@@ -1751,7 +1883,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 10
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010314,
@@ -1774,7 +1907,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 25
-   }
+   },
+   "maintenance": 150
   },
   {
    "id": 1010315,
@@ -1797,7 +1931,8 @@
    "workforce": {
     "type": 1010052,
     "amount": 50
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010300,
@@ -1824,7 +1959,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 250
-   }
+   },
+   "maintenance": 1000
   },
   {
    "id": 1010319,
@@ -1847,7 +1983,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 100
-   }
+   },
+   "maintenance": 100
   },
   {
    "id": 1010320,
@@ -1870,7 +2007,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 150
-   }
+   },
+   "maintenance": 750
   },
   {
    "id": 1010321,
@@ -1893,7 +2031,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 150
-   }
+   },
+   "maintenance": 725
   },
   {
    "id": 1010323,
@@ -1920,7 +2059,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 150
-   }
+   },
+   "maintenance": 1200
   },
   {
    "id": 1010324,
@@ -1947,7 +2087,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 150
-   }
+   },
+   "maintenance": 1400
   },
   {
    "id": 1010284,
@@ -1974,7 +2115,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 150
-   }
+   },
+   "maintenance": 500
   },
   {
    "id": 1010326,
@@ -2001,7 +2143,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 150
-   }
+   },
+   "maintenance": 1600
   },
   {
    "id": 1010327,
@@ -2028,7 +2171,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 125
-   }
+   },
+   "maintenance": 750
   },
   {
    "id": 1010328,
@@ -2055,7 +2199,8 @@
    "workforce": {
     "type": 1010116,
     "amount": 150
-   }
+   },
+   "maintenance": 2500
   },
   {
    "id": 101250,
@@ -2082,7 +2227,8 @@
    "workforce": {
     "type": 1010117,
     "amount": 100
-   }
+   },
+   "maintenance": 1000
   },
   {
    "id": 1010329,
@@ -2100,7 +2246,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 5
   },
   {
    "id": 1010330,
@@ -2118,7 +2265,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 25
   },
   {
    "id": 1010331,
@@ -2136,7 +2284,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 5
   },
   {
    "id": 1010332,
@@ -2154,7 +2303,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 5
   },
   {
    "id": 1010333,
@@ -2172,7 +2322,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 25
   },
   {
    "id": 101260,
@@ -2190,7 +2341,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 101251,
@@ -2208,7 +2360,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 25
   },
   {
    "id": 101263,
@@ -2226,7 +2379,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 5
   },
   {
    "id": 101269,
@@ -2244,7 +2398,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 20
-   }
+   },
+   "maintenance": 25
   },
   {
    "id": 101270,
@@ -2262,7 +2417,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 25
   },
   {
    "id": 101272,
@@ -2280,7 +2436,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 5
   },
   {
    "id": 1010339,
@@ -2298,7 +2455,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 50
-   }
+   },
+   "maintenance": 25
   },
   {
    "id": 101262,
@@ -2316,7 +2474,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 15
-   }
+   },
+   "maintenance": 5
   },
   {
    "id": 101261,
@@ -2339,7 +2498,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 20
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 101265,
@@ -2362,7 +2522,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 20
-   }
+   },
+   "maintenance": 15
   },
   {
    "id": 1010318,
@@ -2385,7 +2546,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 101267,
@@ -2403,7 +2565,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 100
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 101268,
@@ -2426,7 +2589,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 50
-   }
+   },
+   "maintenance": 20
   },
   {
    "id": 101415,
@@ -2449,7 +2613,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 10
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 101273,
@@ -2476,7 +2641,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 20
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010340,
@@ -2503,7 +2669,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 30
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 1010341,
@@ -2530,7 +2697,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 100
-   }
+   },
+   "maintenance": 50
   },
   {
    "id": 101252,
@@ -2553,7 +2721,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 150
-   }
+   },
+   "maintenance": 150
   },
   {
    "id": 101264,
@@ -2580,7 +2749,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 25
-   }
+   },
+   "maintenance": 15
   },
   {
    "id": 101271,
@@ -2607,7 +2777,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 100
-   }
+   },
+   "maintenance": 100
   },
   {
    "id": 1010561,
@@ -2625,7 +2796,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 75
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 101311,
@@ -2643,7 +2815,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 100
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 1010317,
@@ -2666,7 +2839,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 50
-   }
+   },
+   "maintenance": 10
   },
   {
    "id": 101266,
@@ -2689,7 +2863,8 @@
    "workforce": {
     "type": 1010366,
     "amount": 30
-   }
+   },
+   "maintenance": 15
   },
   {
    "id": 101296,
@@ -2712,7 +2887,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 100
-   }
+   },
+   "maintenance": 100
   },
   {
    "id": 1010342,
@@ -2739,7 +2915,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 175
-   }
+   },
+   "maintenance": 250
   },
   {
    "id": 118571,
@@ -2762,7 +2939,8 @@
    "workforce": {
     "type": 1010115,
     "amount": 75
-   }
+   },
+   "maintenance": 350
   },
   {
    "id": 269840,
@@ -2785,7 +2963,8 @@
    "workforce": {
     "type": 1010367,
     "amount": 75
-   }
+   },
+   "maintenance": 350
   }
  ],
  "products": [

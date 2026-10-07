@@ -16,9 +16,14 @@ export interface Island {
   notes: string;
 }
 
+/** The game's "Revenue" difficulty setting, which adds a tax bonus. */
+export type Revenue = 'plenty' | 'medium' | 'spare';
+export const REVENUES: Revenue[] = ['plenty', 'medium', 'spare'];
+
 export interface Settings {
   /** Hide needs whose resident threshold the island has not reached. */
   applyUnlocks: boolean;
+  revenue: Revenue;
 }
 
 export interface PlannerState {
@@ -40,7 +45,7 @@ export function newIsland(name: string, region: Id = game.regions[0].id): Island
 
 export const initialState = (): PlannerState => ({
   islands: [newIsland('Home island')],
-  settings: { applyUnlocks: true },
+  settings: { applyUnlocks: true, revenue: 'medium' },
 });
 
 export type Action =
@@ -158,7 +163,13 @@ export function parseExportFile(input: unknown): ParseResult {
 
   const s = isObject(input.settings) ? input.settings : {};
   return {
-    state: { islands, settings: { applyUnlocks: s.applyUnlocks !== false } },
+    state: {
+      islands,
+      settings: {
+        applyUnlocks: s.applyUnlocks !== false,
+        revenue: REVENUES.includes(s.revenue as Revenue) ? (s.revenue as Revenue) : 'medium',
+      },
+    },
     warnings,
   };
 }
