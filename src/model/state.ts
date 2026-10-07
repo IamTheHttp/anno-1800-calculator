@@ -13,6 +13,10 @@ export interface Island {
   buildings: Record<string, number>;
   /** Bonus-need products this island supplies to its residents. */
   bonusNeeds: Id[];
+  /** Build the consumer chains for residents and targets automatically; `buildings` then counts extras on top. */
+  autoBuild: boolean;
+  /** Desired spare output per good, in tons per minute. */
+  targets: Record<string, number>;
   notes: string;
 }
 
@@ -51,7 +55,7 @@ export interface ExportFile extends PlannerState {
 export const newId = () => Math.random().toString(36).slice(2, 10);
 
 export function newIsland(name: string, region: Id = game.regions[0].id): Island {
-  return { id: newId(), name, region, residents: {}, buildings: {}, bonusNeeds: [], notes: '' };
+  return { id: newId(), name, region, residents: {}, buildings: {}, bonusNeeds: [], autoBuild: false, targets: {}, notes: '' };
 }
 
 export const initialState = (): PlannerState => ({
@@ -66,6 +70,9 @@ export type Action =
   | { type: 'setResidents'; id: string; level: Id; value: number }
   | { type: 'setBuildings'; id: string; factory: Id; value: number }
   | { type: 'toggleBonusNeed'; id: string; product: Id }
+  | { type: 'setTarget'; id: string; product: Id; value: number }
+  /** Turns auto-build on or off; `clear` lists factories whose manual counts to zero. */
+  | { type: 'setAutoBuild'; id: string; on: boolean; clear?: Id[] }
   | { type: 'removeIsland'; id: string }
   | { type: 'moveIsland'; id: string; delta: -1 | 1 }
   | { type: 'setSettings'; patch: Partial<Settings> }
@@ -103,6 +110,20 @@ export function reducer(state: PlannerState, action: Action): PlannerState {
           ? i.bonusNeeds.filter((p) => p !== action.product)
           : [...i.bonusNeeds, action.product],
       }));
+    case 'setTarget':
+      return mapIsland(action.id, (i) => {
+        const targets = { ...i.targets };
+        const v = Math.max(0, Number(action.value) || 0);
+        if (v === 0) delete targets[action.product];
+        else targets[action.product] = v;
+        return { ...i, targets };
+      });
+    case 'setAutoBuild':
+      return mapIsland(action.id, (i) => {
+        const buildings = { ...i.buildings };
+        for (const f of action.clear ?? []) delete buildings[f];
+        return { ...i, autoBuild: action.on, buildings };
+      });
     case 'removeIsland':
       return {
         ...state,
@@ -164,6 +185,17 @@ export function parseExportFile(input: unknown): ParseResult {
     return out;
   };
 
+  const rates = (raw: unknown, island: string) => {
+    const out: Record<string, number> = {};
+    if (!isObject(raw)) return out;
+    for (const [k, v] of Object.entries(raw)) {
+      const n = Number(v);
+      if (!productById.has(Number(k))) warnings.push(`${island}: dropped target for unknown good ${k}.`);
+      else if (Number.isFinite(n) && n > 0) out[k] = n;
+    }
+    return out;
+  };
+
   const islands = input.islands.map((rawIsland, idx): Island => {
     if (!isObject(rawIsland)) throw new Error(`Island #${idx + 1} is malformed.`);
     const name = typeof rawIsland.name === 'string' && rawIsland.name ? rawIsland.name : `Island ${idx + 1}`;
@@ -182,6 +214,8 @@ export function parseExportFile(input: unknown): ParseResult {
       residents: counts(rawIsland.residents, (id) => levelById.has(id), 'population level', name),
       buildings: counts(rawIsland.buildings, (id) => factoryById.has(id), 'building', name),
       bonusNeeds,
+      autoBuild: rawIsland.autoBuild === true,
+      targets: rates(rawIsland.targets, name),
       notes: typeof rawIsland.notes === 'string' ? rawIsland.notes : '',
     };
   });

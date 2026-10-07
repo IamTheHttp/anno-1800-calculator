@@ -39,14 +39,21 @@ export function residentDemand(island: Island, settings: Settings): Rates {
   return out;
 }
 
+/** Tons per minute of spare output the island wants of each good. */
+export function islandTargets(island: Island): Rates {
+  return new Map(Object.entries(island.targets).map(([p, v]) => [Number(p), v]));
+}
+
 export interface ProductBalance {
   product: Id;
   produced: number;
   residents: number;
   factories: number;
+  /** Spare output the island wants to keep. */
+  target: number;
   /** + imports − exports over trade routes. */
   trade: number;
-  /** produced − residents − factories + trade, in tons per minute. */
+  /** produced − residents − factories − target + trade, in tons per minute. */
   net: number;
 }
 
@@ -66,6 +73,7 @@ export function utilization(islands: Island[], settings: Settings): Utilization 
   const built = new Map<Id, number>();
   for (const island of islands) {
     for (const [p, r] of residentDemand(island, settings)) add(demand, p, r);
+    for (const [p, r] of islandTargets(island)) add(demand, p, r);
     for (const [fid, count] of Object.entries(island.buildings)) {
       const f = factoryById.get(Number(fid));
       if (!f || count <= 0) continue;
@@ -126,16 +134,17 @@ export function islandBalance(island: Island, settings: Settings, util?: Utiliza
     for (const o of f.outputs) add(produced, o.product, count * f.tpmin * o.amount);
     for (const i of f.inputs) add(factoryUse, i.product, count * f.tpmin * i.amount * run);
   }
-  return mergeBalance(produced, residentDemand(island, settings), factoryUse);
+  return mergeBalance(produced, residentDemand(island, settings), factoryUse, islandTargets(island));
 }
 
-function mergeBalance(produced: Rates, residents: Rates, factories: Rates): ProductBalance[] {
-  const ids = new Set([...produced.keys(), ...residents.keys(), ...factories.keys()]);
+function mergeBalance(produced: Rates, residents: Rates, factories: Rates, targets: Rates): ProductBalance[] {
+  const ids = new Set([...produced.keys(), ...residents.keys(), ...factories.keys(), ...targets.keys()]);
   return [...ids].map((product) => {
     const p = produced.get(product) ?? 0;
     const r = residents.get(product) ?? 0;
     const f = factories.get(product) ?? 0;
-    return { product, produced: p, residents: r, factories: f, trade: 0, net: p - r - f };
+    const t = targets.get(product) ?? 0;
+    return { product, produced: p, residents: r, factories: f, target: t, trade: 0, net: p - r - f - t };
   });
 }
 
@@ -148,20 +157,53 @@ export interface Analysis {
   flows: RouteFlow[];
   /** Per island, per good: + imports − exports. */
   trade: Map<string, Map<Id, number>>;
+  /** Population- and target-driven plan, with routes moving demand between islands. */
+  plan: EmpirePlan;
+  /** Buildings auto-build adds per island (whole counts, on top of manual ones). */
+  auto: Map<string, Map<Id, number>>;
+  /** Islands as built: manual counts plus auto-built ones. */
+  effective: Map<string, Island>;
 }
 
-/** Island and empire balances, with factories running at empire-wide utilization and routes applied. */
+/** Whole buildings auto-build places on `island` for its share of `plan`; other-region buildings are left to routes. */
+export function autoBuildings(island: Island, plan: EmpirePlan): Map<Id, number> {
+  const out = new Map<Id, number>();
+  if (!island.autoBuild) return out;
+  for (const [fid, required] of plan.byIsland.get(island.id) ?? []) {
+    const f = factoryById.get(fid);
+    const n = ceilWhole(required);
+    if (f && f.region === island.region && n > 0) out.set(fid, n);
+  }
+  return out;
+}
+
+const withAuto = (island: Island, auto: Map<Id, number>): Island => {
+  if (auto.size === 0) return island;
+  const buildings = { ...island.buildings };
+  for (const [fid, n] of auto) buildings[fid] = (buildings[fid] ?? 0) + n;
+  return { ...island, buildings };
+};
+
+/**
+ * Plans every island, applies auto-build, then computes island and empire
+ * balances with factories running at empire-wide utilization and routes applied.
+ */
 export function analyze(islands: Island[], settings: Settings, routes: TradeRoute[] = []): Analysis {
-  const util = utilization(islands, settings);
-  const preTrade = new Map(islands.map((i) => [i.id, islandBalance(i, settings, util)]));
+  const plan = planEmpire(islands, settings, routes);
+  const auto = new Map(islands.map((i) => [i.id, autoBuildings(i, plan)]));
+  const built = islands.map((i) => withAuto(i, auto.get(i.id)!));
+  const util = utilization(built, settings);
+  const preTrade = new Map(built.map((i) => [i.id, islandBalance(i, settings, util)]));
   const produced: Rates = new Map();
   const residents: Rates = new Map();
   const factories: Rates = new Map();
+  const targets: Rates = new Map();
   for (const balance of preTrade.values()) {
     for (const b of balance) {
       add(produced, b.product, b.produced);
       add(residents, b.product, b.residents);
       add(factories, b.product, b.factories);
+      add(targets, b.product, b.target);
     }
   }
   const nets = new Map([...preTrade].map(([id, bal]) => [id, new Map(bal.map((b) => [b.product, b.net]))]));
@@ -172,7 +214,7 @@ export function analyze(islands: Island[], settings: Settings, routes: TradeRout
       if (!t) return [id, bal];
       const rows = new Map(bal.map((b) => [b.product, { ...b }]));
       for (const [product, v] of t) {
-        const row = rows.get(product) ?? { product, produced: 0, residents: 0, factories: 0, trade: 0, net: 0 };
+        const row = rows.get(product) ?? { product, produced: 0, residents: 0, factories: 0, target: 0, trade: 0, net: 0 };
         row.trade += v;
         row.net += v;
         rows.set(product, row);
@@ -180,7 +222,16 @@ export function analyze(islands: Island[], settings: Settings, routes: TradeRout
       return [id, [...rows.values()]];
     }),
   );
-  return { utilization: util, empire: mergeBalance(produced, residents, factories), byIsland, flows, trade };
+  return {
+    utilization: util,
+    empire: mergeBalance(produced, residents, factories, targets),
+    byIsland,
+    flows,
+    trade,
+    plan,
+    auto,
+    effective: new Map(built.map((i) => [i.id, i])),
+  };
 }
 
 /** Sums island balances, as if every island could ship to every other one. */
@@ -233,11 +284,17 @@ export interface BuildingPlan {
  * building that uses them.
  */
 export function chainBuildings(external: Map<string, number>): Map<Id, number> {
-  const key = (product: Id, region: Id) => `${product}:${region}`;
+  return runChain(external).buildings;
+}
+
+export const nodeKey = (product: Id, region: Id) => `${product}:${region}`;
+
+/** Chain expansion: buildings per factory, and the total t/min each good/region node must supply. */
+function runChain(external: Map<string, number>): { buildings: Map<Id, number>; inflow: Map<string, number> } {
   const nodes = new Map<string, { product: Id; region: Id }>();
   const order: string[] = [];
   const visit = (product: Id, region: Id) => {
-    const k = key(product, region);
+    const k = nodeKey(product, region);
     if (nodes.has(k)) return;
     nodes.set(k, { product, region });
     const f = producerFor(product, region);
@@ -250,47 +307,114 @@ export function chainBuildings(external: Map<string, number>): Map<Id, number> {
   }
   // Reverse post-order puts every good before the inputs it consumes.
   const inflow = new Map(external);
-  const out = new Map<Id, number>();
+  const buildings = new Map<Id, number>();
   for (const k of order.reverse()) {
     const { product, region } = nodes.get(k)!;
     const rate = inflow.get(k) ?? 0;
     const f = producerFor(product, region);
     if (!f || rate <= 0) continue;
-    const buildings = rate / outputRate(f);
-    add(out, f.id, buildings);
+    const n = rate / outputRate(f);
+    add(buildings, f.id, n);
     for (const i of f.inputs) {
-      const ck = key(i.product, f.region);
-      inflow.set(ck, (inflow.get(ck) ?? 0) + buildings * f.tpmin * i.amount);
+      const ck = nodeKey(i.product, f.region);
+      inflow.set(ck, (inflow.get(ck) ?? 0) + n * f.tpmin * i.amount);
     }
   }
-  return out;
+  return { buildings, inflow };
+}
+
+export interface EmpirePlan {
+  /** Fractional buildings each island's residents, targets and routes call for. */
+  byIsland: Map<string, Map<Id, number>>;
+  /** Tons per minute each route carries in the plan. */
+  transfers: Map<string, number>;
 }
 
 /**
- * Population-driven view: buildings needed for an island's residents, plus
- * its exports, minus what it imports (`trade`: + imports − exports).
+ * Population- and target-driven plan for every island. Routes move demand:
+ * a fixed route moves its amount, an Auto route moves all of the destination's
+ * remaining need for the good (residents, targets and its own factories), so
+ * the source plans that chain instead. Iterates until route amounts settle.
  */
-export function requiredBuildings(island: Island, settings: Settings, trade?: Map<Id, number>): BuildingPlan[] {
-  const external = new Map<string, number>();
-  const at = (product: Id) => `${product}:${island.region}`;
-  for (const [product, rate] of residentDemand(island, settings)) external.set(at(product), rate);
-  for (const [product, t] of trade ?? []) external.set(at(product), (external.get(at(product)) ?? 0) - t);
-  return planFrom(chainBuildings(external), island.buildings);
+export function planEmpire(islands: Island[], settings: Settings, routes: TradeRoute[] = []): EmpirePlan {
+  const byId = new Map(islands.map((i) => [i.id, i]));
+  const live = routes.filter((r) => byId.has(r.from) && byId.has(r.to) && r.from !== r.to);
+  const base = new Map(
+    islands.map((i) => {
+      const ext = new Map<string, number>();
+      for (const [p, r] of residentDemand(i, settings)) ext.set(nodeKey(p, i.region), r);
+      for (const [p, r] of islandTargets(i)) ext.set(nodeKey(p, i.region), (ext.get(nodeKey(p, i.region)) ?? 0) + r);
+      return [i.id, ext];
+    }),
+  );
+  const transfers = new Map(live.map((r) => [r.id, r.amount ?? 0]));
+
+  const externals = () => {
+    const out = new Map([...base].map(([id, ext]) => [id, new Map(ext)]));
+    for (const r of live) {
+      const t = transfers.get(r.id)!;
+      const to = nodeKey(r.product, byId.get(r.to)!.region);
+      const from = nodeKey(r.product, byId.get(r.from)!.region);
+      out.get(r.to)!.set(to, (out.get(r.to)!.get(to) ?? 0) - t);
+      out.get(r.from)!.set(from, (out.get(r.from)!.get(from) ?? 0) + t);
+    }
+    return out;
+  };
+
+  let runs = new Map<string, ReturnType<typeof runChain>>();
+  for (let pass = 0; pass < islands.length + 3; pass++) {
+    runs = new Map([...externals()].map(([id, ext]) => [id, runChain(ext)]));
+    let changed = false;
+    // Remaining need per destination node, before any route into it.
+    const remaining = new Map<string, number>();
+    for (const r of live) {
+      const k = `${r.to}|${nodeKey(r.product, byId.get(r.to)!.region)}`;
+      if (remaining.has(k)) continue;
+      const node = nodeKey(r.product, byId.get(r.to)!.region);
+      const incoming = live
+        .filter((x) => x.to === r.to && nodeKey(x.product, byId.get(x.to)!.region) === node)
+        .reduce((s, x) => s + transfers.get(x.id)!, 0);
+      remaining.set(k, Math.max(0, (runs.get(r.to)!.inflow.get(node) ?? 0) + incoming));
+    }
+    const next = new Map<string, number>();
+    for (const r of [...live.filter((x) => x.amount !== null), ...live.filter((x) => x.amount === null)]) {
+      const k = `${r.to}|${nodeKey(r.product, byId.get(r.to)!.region)}`;
+      const left = remaining.get(k)!;
+      const t = r.amount ?? left;
+      next.set(r.id, t);
+      remaining.set(k, Math.max(0, left - t));
+    }
+    for (const [id, t] of next) {
+      if (Math.abs(t - transfers.get(id)!) > 1e-9) changed = true;
+      transfers.set(id, t);
+    }
+    if (!changed) break;
+  }
+  return { byIsland: new Map([...runs].map(([id, r]) => [id, r.buildings])), transfers };
+}
+
+/** Population-driven view for one island planned on its own, against its buildings. */
+export function requiredBuildings(island: Island, settings: Settings): BuildingPlan[] {
+  return planFrom(planEmpire([island], settings).byIsland.get(island.id)!, island.buildings);
+}
+
+/** One island's share of an empire plan, against its buildings as built. */
+export function islandPlan(analysis: Analysis, island: Island): BuildingPlan[] {
+  return planFrom(analysis.plan.byIsland.get(island.id) ?? new Map(), (analysis.effective.get(island.id) ?? island).buildings);
+}
+
+/** The whole empire plan, against all buildings as built. */
+export function empirePlan(analysis: Analysis): BuildingPlan[] {
+  const need = new Map<Id, number>();
+  const existing: Record<string, number> = {};
+  for (const m of analysis.plan.byIsland.values()) for (const [fid, n] of m) add(need, fid, n);
+  for (const i of analysis.effective.values()) for (const [fid, n] of Object.entries(i.buildings)) existing[fid] = (existing[fid] ?? 0) + n;
+  return planFrom(need, existing);
 }
 
 /** Population-driven view across all islands, against all existing buildings. */
-export function empireRequiredBuildings(
-  islands: Island[],
-  settings: Settings,
-  trade?: Map<string, Map<Id, number>>,
-): BuildingPlan[] {
-  const need = new Map<Id, number>();
-  const existing: Record<string, number> = {};
-  for (const island of islands) {
-    for (const p of requiredBuildings(island, settings, trade?.get(island.id))) add(need, p.factory.id, p.required);
-    for (const [fid, n] of Object.entries(island.buildings)) existing[fid] = (existing[fid] ?? 0) + n;
-  }
-  return planFrom(need, existing);
+export function empireRequiredBuildings(islands: Island[], settings: Settings, routes: TradeRoute[] = []): BuildingPlan[] {
+  return empirePlan(analyze(islands, settings, routes));
 }
 
 /** Rounds up to whole buildings, ignoring float noise in the source rates. */

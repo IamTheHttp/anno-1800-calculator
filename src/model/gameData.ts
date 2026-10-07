@@ -122,3 +122,19 @@ export function producerFor(product: Id, region: Id): Factory | undefined {
   if (!list) return undefined;
   return list.find((f) => f.region === region) ?? list[0];
 }
+
+/**
+ * Goods that end in construction or other non-consumer products, plus every
+ * input upstream of them (wood, clay, steel, glass, …). Auto-build never
+ * clears manual counts of their producers.
+ */
+export const constructionFeeders: Set<Id> = (() => {
+  const out = new Set<Id>();
+  const visit = (product: Id) => {
+    if (out.has(product)) return;
+    out.add(product);
+    for (const f of producersOf.get(product) ?? []) for (const i of f.inputs) visit(i.product);
+  };
+  for (const f of game.factories) if (factoryGroup(f) === 'Construction & other') visit(f.outputs[0].product);
+  return out;
+})();

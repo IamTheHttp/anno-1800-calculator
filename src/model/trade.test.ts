@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { analyze, empireRequiredBuildings, requiredBuildings, shortages } from './calc';
+import { analyze, empirePlan, islandPlan, shortages } from './calc';
 import { initialState, newIsland, parseExportFile, reducer, toExportFile, type Island, type Settings, type TradeRoute } from './state';
 import { resolveRoutes } from './trade';
 
@@ -83,27 +83,49 @@ describe('analyze with routes', () => {
 });
 
 describe('needs plan with routes', () => {
+  const req = (a: ReturnType<typeof analyze>, i: Island, factory: number) =>
+    islandPlan(a, i).find((p) => p.factory.id === factory)?.required ?? 0;
+
   it('drops the chain of an imported good from the home island', () => {
     const a = analyze([home, booze], settings, [route(booze, home, SCHNAPPS, null)]);
-    const plan = requiredBuildings(home, settings, a.trade.get(home.id));
-    const distillery = plan.find((p) => p.factory.id === SCHNAPPS_DISTILLERY);
-    expect(distillery?.required ?? 0).toBeCloseTo(0, 3);
-    expect(plan.find((p) => p.factory.id === POTATO_FARM)?.required ?? 0).toBeCloseTo(0, 3);
+    expect(req(a, home, SCHNAPPS_DISTILLERY)).toBeCloseTo(0, 6);
+    expect(req(a, home, POTATO_FARM)).toBeCloseTo(0, 6);
   });
 
   it('puts the exported chain on the producing island', () => {
     const a = analyze([home, booze], settings, [route(booze, home, SCHNAPPS, null)]);
-    const plan = requiredBuildings(booze, settings, a.trade.get(booze.id));
     // 2.67 t/min of schnapps = 1.33 distilleries and 1.33 potato farms.
-    expect(plan.find((p) => p.factory.id === SCHNAPPS_DISTILLERY)!.required).toBeCloseTo(4 / 3, 2);
-    expect(plan.find((p) => p.factory.id === POTATO_FARM)!.required).toBeCloseTo(4 / 3, 2);
+    expect(req(a, booze, SCHNAPPS_DISTILLERY)).toBeCloseTo(4 / 3, 2);
+    expect(req(a, booze, POTATO_FARM)).toBeCloseTo(4 / 3, 2);
+  });
+
+  it('routes demand even when the source has built nothing yet', () => {
+    const empty = island('Empty', {});
+    const a = analyze([home, empty], settings, [route(empty, home, SCHNAPPS, null)]);
+    expect(req(a, empty, SCHNAPPS_DISTILLERY)).toBeCloseTo(4 / 3, 2);
+    expect(a.plan.transfers.get(`Empty-Home-${SCHNAPPS}`)).toBeCloseTo(8 / 3, 3);
+  });
+
+  it('chains routes through several islands', () => {
+    const potatoes = island('Potatoes', {});
+    const a = analyze([home, booze, potatoes], settings, [
+      route(booze, home, SCHNAPPS, null),
+      route(potatoes, booze, 1010195, null),
+    ]);
+    expect(req(a, booze, POTATO_FARM)).toBeCloseTo(0, 6);
+    expect(req(a, potatoes, POTATO_FARM)).toBeCloseTo(4 / 3, 2);
+  });
+
+  it('a fixed route moves only its amount', () => {
+    const a = analyze([home, booze], settings, [route(booze, home, SCHNAPPS, 2)]);
+    expect(req(a, booze, SCHNAPPS_DISTILLERY)).toBeCloseTo(1, 3);
+    expect(req(a, home, SCHNAPPS_DISTILLERY)).toBeCloseTo(1 / 3, 2);
   });
 
   it('empire plan is the same with or without routes', () => {
-    const a = analyze([home, booze], settings, [route(booze, home, SCHNAPPS, null)]);
-    const req = (plans: ReturnType<typeof empireRequiredBuildings>) =>
-      Object.fromEntries(plans.filter((p) => p.required > 1e-6).map((p) => [p.factory.id, Math.round(p.required * 1e4)]));
-    expect(req(empireRequiredBuildings([home, booze], settings, a.trade))).toEqual(req(empireRequiredBuildings([home, booze], settings)));
+    const totals = (a: ReturnType<typeof analyze>) =>
+      Object.fromEntries(empirePlan(a).filter((p) => p.required > 1e-6).map((p) => [p.factory.id, Math.round(p.required * 1e4)]));
+    expect(totals(analyze([home, booze], settings, [route(booze, home, SCHNAPPS, null)]))).toEqual(totals(analyze([home, booze], settings)));
   });
 });
 

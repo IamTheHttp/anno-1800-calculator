@@ -29,6 +29,7 @@ export function BalanceTable({
     [rows, deficitsOnly],
   );
   const hasTrade = rows.some((r) => Math.abs(r.trade) > 1e-9);
+  const hasTarget = rows.some((r) => r.target > 0);
   return (
     <>
       <div className="toolbar">
@@ -49,6 +50,7 @@ export function BalanceTable({
                 <th className="num">Produced</th>
                 <th className="num">Residents use</th>
                 <th className="num">Factories use</th>
+                {hasTarget && <th className="num">Target</th>}
                 {hasTrade && <th className="num" title="+ imports − exports over trade routes">Trade</th>}
                 <th className="num">Net</th>
                 <th className="num" title="Net expressed in buildings of the usual producer">≈ Buildings</th>
@@ -66,6 +68,7 @@ export function BalanceTable({
                     <td className="num">{fmt(r.produced)}</td>
                     <td className="num">{fmt(r.residents)}</td>
                     <td className="num">{fmt(r.factories)}</td>
+                    {hasTarget && <td className="num">{r.target > 0 ? fmt(r.target) : ''}</td>}
                     {hasTrade && <td className={`num ${signClass(r.trade)}`}>{fmtSigned(r.trade)}</td>}
                     <td className={`num strong ${signClass(r.net)}`}>{fmtSigned(r.net)}</td>
                     <td className={`num ${signClass(r.net)}`}>{b === null ? '—' : fmtSigned(b, 1)}</td>

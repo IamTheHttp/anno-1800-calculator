@@ -16,6 +16,16 @@ Working conditions, items, electricity, and trade unions are not modelled.
 - **Needs plan** (population-driven) — every building the residents' needs call
   for, through the full chain, vs. what is built. Goods from the other region
   (e.g. coffee for engineers) carry a region badge.
+- **Auto-build** — a per-island toggle that places every building the
+  residents' needs and the island's targets call for, through the full chain
+  (e.g. 2000 workers → fisheries, distilleries, bakeries, …). Counts you
+  enter become extras on top, so bricks, lumberjacks or weapons factories are
+  never reset. Turning it on offers to clear manual counts of consumer-only
+  chains so they are not doubled. Buildings from the other region are left to
+  trade routes.
+- **Targets** — spare output to keep per good on an island (e.g. 2 t/min of
+  bricks or sails). Targets count as demand in the balance and the needs plan,
+  and auto-build places their chains.
 - **Workforce** — workers the buildings need vs. residents of each tier.
 - **Shortage marks** — goods an island lacks are marked red when the whole
   empire is short of them, and amber when another island has the surplus.
@@ -74,6 +84,9 @@ Delete `.data-src/` first to pull the latest upstream data.
 - A tier consumes `residents × tpmin` tons per minute of each active need.
 - One resident provides one worker of its tier.
 - Routes: fixed amounts ship first, then Auto routes in list order.
+- The needs plan routes demand: an Auto route moves all of the destination's
+  remaining need for the good (residents, targets and its own factories) to
+  the source, which then plans that chain; a fixed route moves its amount.
 - A factory runs at `min(1, needed / capacity)` of its output, empire-wide.
   "Needed" is resident demand plus the inputs of factories that are
   themselves needed. Goods no resident or factory uses (bricks, steel beams,
@@ -111,6 +124,8 @@ Actions*. Pages on a private repository needs a paid GitHub plan.
       "residents": { "15000000": 500 },
       "buildings": { "1010278": 2 },
       "bonusNeeds": [],
+      "autoBuild": true,
+      "targets": { "1010205": 2 },
       "notes": ""
     }
   ]

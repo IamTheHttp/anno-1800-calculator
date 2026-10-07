@@ -4,7 +4,7 @@ import {
   empireShortGoods,
   housesFor,
   islandIncome,
-  requiredBuildings,
+  islandPlan,
   residentDemand,
   shortages,
   workforceBalance,
@@ -14,6 +14,8 @@ import {
   type Utilization,
 } from '../model/calc';
 import {
+  constructionFeeders,
+  factoryById,
   FACTORY_GROUPS,
   factoriesOfRegion,
   factoryGroup,
@@ -43,6 +45,10 @@ interface Marks {
   /** Workers short, per population level. */
   workersShort: Map<Id, number>;
   utilization: Utilization;
+  /** Buildings auto-build adds, per factory. */
+  auto: Map<Id, number>;
+  /** Plan requirement per factory (fractional). */
+  required: Map<Id, number>;
 }
 
 const SHORTAGE_TEXT: Record<Shortage, string> = {
@@ -70,9 +76,10 @@ export function IslandView({
   const [tab, setTab] = usePref<Tab>('islandTab', 'setup');
   const empire = analysis.empire;
   const balance = useMemo(() => analysis.byIsland.get(island.id) ?? [], [analysis, island.id]);
-  const plan = useMemo(() => requiredBuildings(island, settings, analysis.trade.get(island.id)), [island, settings, analysis.trade]);
-  const workforce = useMemo(() => workforceBalance(island), [island]);
-  const income = useMemo(() => islandIncome(island, settings, empireShortGoods(empire)), [island, settings, empire]);
+  const built = analysis.effective.get(island.id) ?? island;
+  const plan = useMemo(() => islandPlan(analysis, island), [analysis, island]);
+  const workforce = useMemo(() => workforceBalance(built), [built]);
+  const income = useMemo(() => islandIncome(built, settings, empireShortGoods(empire)), [built, settings, empire]);
 
   const marks = useMemo<Marks>(() => {
     const workersShort = new Map<Id, number>();
@@ -85,8 +92,10 @@ export function IslandView({
       missing: new Map(plan.filter((p) => p.missing > 0).map((p) => [p.factory.id, p.missing])),
       workersShort,
       utilization: analysis.utilization,
+      auto: analysis.auto.get(island.id) ?? new Map(),
+      required: analysis.plan.byIsland.get(island.id) ?? new Map(),
     };
-  }, [balance, empire, plan, workforce, analysis.utilization]);
+  }, [balance, empire, plan, workforce, analysis, island.id]);
 
   const deficits = marks.shortage.size;
   const toBuild = plan.filter((p) => p.missing > 0).reduce((s, p) => s + p.missing, 0);
@@ -139,6 +148,9 @@ export function IslandView({
           <p className="lede">
             Every building the residents' needs call for, through the full chain, against what is built here.
           </p>
+          {island.autoBuild ? (
+            <p className="hint">Auto-build is on: this island’s own buildings follow this plan. Other-region rows need a route.</p>
+          ) : (
           <div className="toolbar">
             <button
               type="button"
@@ -151,6 +163,7 @@ export function IslandView({
               Fill buildings from plan
             </button>
           </div>
+          )}
           <PlanTable rows={plan} region={island.region} />
         </>
       )}
@@ -345,6 +358,7 @@ function Setup({
   return (
     <div className="setup">
       <Residents island={island} settings={settings} marks={marks} dispatch={dispatch} />
+      <Targets island={island} marks={marks} dispatch={dispatch} />
       <Buildings island={island} marks={marks} dispatch={dispatch} />
       <section className="panel">
         <h3>Notes</h3>
@@ -454,11 +468,12 @@ function Buildings({ island, marks, dispatch }: { island: Island; marks: Marks; 
   const [query, setQuery] = useState('');
   const [filter, setFilter] = usePref<'all' | 'built' | 'attention'>('buildingFilter', 'all');
   const q = query.trim().toLowerCase();
+  const total = (f: Factory) => (island.buildings[f.id] ?? 0) + (marks.auto.get(f.id) ?? 0);
   const needsAttention = (f: Factory) =>
-    marks.missing.has(f.id) || marks.shortage.has(f.outputs[0].product) || ((island.buildings[f.id] ?? 0) > 0 && f.inputs.some((i) => marks.shortage.has(i.product)));
+    marks.missing.has(f.id) || marks.shortage.has(f.outputs[0].product) || (total(f) > 0 && f.inputs.some((i) => marks.shortage.has(i.product)));
   const factories = factoriesOfRegion(island.region).filter(
     (f) =>
-      (filter !== 'built' || (island.buildings[f.id] ?? 0) > 0) &&
+      (filter !== 'built' || total(f) > 0) &&
       (filter !== 'attention' || needsAttention(f)) &&
       (!q || f.name.toLowerCase().includes(q) || f.outputs.some((o) => productById.get(o.product)?.name.toLowerCase().includes(q))),
   );
@@ -467,6 +482,7 @@ function Buildings({ island, marks, dispatch }: { island: Island; marks: Marks; 
       <h3>
         Buildings <RegionBadge id={island.region} />
       </h3>
+      <AutoBuildToggle island={island} marks={marks} dispatch={dispatch} />
       <div className="toolbar">
         <input type="search" placeholder="Search buildings or goods" value={query} onChange={(e) => setQuery(e.target.value)} />
         <select aria-label="Show buildings" value={filter} onChange={(e) => setFilter(e.target.value as typeof filter)}>
@@ -488,6 +504,8 @@ function Buildings({ island, marks, dispatch }: { island: Island; marks: Marks; 
                   key={f.id}
                   f={f}
                   count={island.buildings[f.id] ?? 0}
+                  auto={marks.auto.get(f.id) ?? 0}
+                  autoMode={island.autoBuild}
                   marks={marks}
                   onChange={(value) => dispatch({ type: 'setBuildings', id: island.id, factory: f.id, value })}
                 />
@@ -500,7 +518,22 @@ function Buildings({ island, marks, dispatch }: { island: Island; marks: Marks; 
   );
 }
 
-function BuildingRow({ f, count, marks, onChange }: { f: Factory; count: number; marks: Marks; onChange: (v: number) => void }) {
+function BuildingRow({
+  f,
+  count: manual,
+  auto,
+  autoMode,
+  marks,
+  onChange,
+}: {
+  f: Factory;
+  count: number;
+  auto: number;
+  autoMode: boolean;
+  marks: Marks;
+  onChange: (v: number) => void;
+}) {
+  const count = manual + auto;
   const out = f.outputs[0];
   const missing = marks.missing.get(f.id);
   const outShort = marks.shortage.get(out.product);
@@ -547,7 +580,124 @@ function BuildingRow({ f, count, marks, onChange }: { f: Factory; count: number;
           </span>
         )}
       </div>
-      <NumberInput ariaLabel={f.name} value={count} onChange={onChange} />
+      {autoMode ? (
+        <span className="auto-count">
+          {auto > 0 && (
+            <span className="flag flag-auto" title="Built by auto-build for residents and targets">
+              Auto {auto}
+            </span>
+          )}
+          <label className="extra-label" title="Manual buildings on top of auto-build">
+            + extra
+            <NumberInput ariaLabel={`${f.name} extra`} value={manual} onChange={onChange} />
+          </label>
+        </span>
+      ) : (
+        <NumberInput ariaLabel={f.name} value={manual} onChange={onChange} />
+      )}
     </div>
+  );
+}
+
+function AutoBuildToggle({ island, marks, dispatch }: { island: Island; marks: Marks; dispatch: Dispatch<Action> }) {
+  return (
+    <div className={`auto-toggle ${island.autoBuild ? 'on' : ''}`}>
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={island.autoBuild}
+          onChange={(e) => {
+            if (!e.target.checked) {
+              dispatch({ type: 'setAutoBuild', id: island.id, on: false });
+              return;
+            }
+            // Manual counts for consumer-only chains would double up with auto-build.
+            const overlap = Object.entries(island.buildings)
+              .map(([fid, n]) => ({ f: factoryById.get(Number(fid))!, n }))
+              .filter(({ f, n }) => f && n > 0 && marks.required.has(f.id) && !constructionFeeders.has(f.outputs[0].product) && !(f.outputs[0].product in island.targets));
+            let clear: Id[] = [];
+            if (
+              overlap.length > 0 &&
+              confirm(
+                `Auto-build now covers these buildings:\n\n${overlap.map(({ f, n }) => `${n}× ${f.name}`).join('\n')}\n\n` +
+                  'Clear their manual counts so they are not doubled? (Bricks, timber, weapons and other construction chains keep their counts either way.)',
+              )
+            )
+              clear = overlap.map(({ f }) => f.id);
+            dispatch({ type: 'setAutoBuild', id: island.id, on: true, clear });
+          }}
+        />
+        <strong>Auto-build</strong>
+      </label>
+      <span className="hint">
+        {island.autoBuild
+          ? 'Buildings for residents’ needs and targets are placed automatically; counts you enter are extras on top.'
+          : 'Place the buildings residents and targets need automatically, through the full chain.'}
+      </span>
+    </div>
+  );
+}
+
+const targetGoods = (region: Id) =>
+  game.products
+    .filter((p) => factoriesOfRegion(region).some((f) => f.outputs[0].product === p.id))
+    .sort((a, b) => Number(constructionFeeders.has(b.id)) - Number(constructionFeeders.has(a.id)) || a.name.localeCompare(b.name));
+
+function Targets({ island, marks, dispatch }: { island: Island; marks: Marks; dispatch: Dispatch<Action> }) {
+  const goods = useMemo(() => targetGoods(island.region), [island.region]);
+  const unused = goods.filter((g) => !(g.id in island.targets));
+  const [pick, setPick] = useState<Id | ''>('');
+  const entries = Object.entries(island.targets).map(([p, v]) => [Number(p), v] as const);
+  const set = (product: Id, value: number) => dispatch({ type: 'setTarget', id: island.id, product, value });
+  return (
+    <section className="panel">
+      <h3>Targets</h3>
+      <p className="hint">
+        Spare output to keep on this island, e.g. 2 t/min of bricks. Targets count as demand in the balance and the needs plan
+        {island.autoBuild ? ', and auto-build places their chains.' : '.'}
+      </p>
+      {entries.length > 0 && (
+        <ul className="target-list">
+          {entries.map(([product, value]) => {
+            const net = marks.net.get(product) ?? -value;
+            return (
+              <li key={product}>
+                <span className="label">
+                  <Icon path={productById.get(product)?.icon ?? null} size={20} />
+                  {productById.get(product)?.name}
+                </span>
+                <NumberInput ariaLabel={`${productById.get(product)?.name} target`} step={0.5} value={value} onChange={(v) => set(product, v)} />
+                <span className="muted small">t/min</span>
+                <span className={`flag ${net < -1e-4 ? 'flag-short' : 'flag-ok'}`}>{net < -1e-4 ? `${fmt(net)} short` : 'met'}</span>
+                <button type="button" className="danger" onClick={() => set(product, 0)}>
+                  Remove
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      <div className="toolbar">
+        <select aria-label="Good" value={pick} onChange={(e) => setPick(e.target.value ? Number(e.target.value) : '')}>
+          <option value="">Add a target…</option>
+          {unused.map((g) => (
+            <option key={g.id} value={g.id}>
+              {g.name}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          disabled={pick === ''}
+          onClick={() => {
+            if (pick === '') return;
+            set(pick, 1);
+            setPick('');
+          }}
+        >
+          Add 1 t/min
+        </button>
+      </div>
+    </section>
   );
 }

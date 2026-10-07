@@ -17,7 +17,7 @@ export function StatusBar({
   analysis: Analysis;
   onOpen: () => void;
 }) {
-  const workforce = workforceBalance(island);
+  const workforce = workforceBalance(analysis.effective.get(island.id) ?? island);
   const balance = analysis.byIsland.get(island.id) ?? [];
   const empireNet = new Map(analysis.empire.map((b) => [b.product, b.net]));
   return (

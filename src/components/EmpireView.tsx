@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import {
-  empireRequiredBuildings,
+  empirePlan,
   empireShortGoods,
   islandIncome,
   shortages,
@@ -31,8 +31,11 @@ export function EmpireView({
   const balance = analysis.empire;
   const [tab, setTab] = usePref<Tab>('empireTab', 'next');
   const short = useMemo(() => empireShortGoods(balance), [balance]);
-  const incomes = useMemo(() => islands.map((i) => islandIncome(i, settings, short)), [islands, settings, short]);
-  const plan = useMemo(() => empireRequiredBuildings(islands, settings, analysis.trade), [islands, settings, analysis.trade]);
+  const incomes = useMemo(
+    () => islands.map((i) => islandIncome(analysis.effective.get(i.id) ?? i, settings, short)),
+    [islands, settings, short, analysis.effective],
+  );
+  const plan = useMemo(() => empirePlan(analysis), [analysis]);
 
   return (
     <section className="view">
@@ -91,7 +94,7 @@ function IslandSummary({
             const shortCount = s.filter((x) => x === 'short').length;
             const importCount = s.length - shortCount;
             const net = incomes[idx].net;
-            const short = workforceBalance(i).filter((w) => w.available < w.required).length;
+            const short = workforceBalance(analysis.effective.get(i.id) ?? i).filter((w) => w.available < w.required).length;
             return (
               <tr key={i.id} className="clickable" onClick={() => onOpenIsland(i.id)}>
                 <td>
