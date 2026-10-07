@@ -3,6 +3,7 @@ import { ChainView } from './components/ChainView';
 import { RegionBadge } from './components/common';
 import { usePref } from './components/usePref';
 import { EmpireView } from './components/EmpireView';
+import { StatusBar } from './components/StatusBar';
 import { TradeView } from './components/TradeView';
 import { applyTheme, THEME_PREF, THEMES, type Theme } from './components/theme';
 import { IslandView } from './components/IslandView';
@@ -35,6 +36,12 @@ export default function App() {
   );
 
   const island = view.kind === 'island' ? state.islands.find((i) => i.id === view.id) : undefined;
+  // The status bar keeps showing the last opened island on the other pages.
+  const [lastIslandId, setLastIslandId] = usePref<string | null>('lastIsland', null);
+  useEffect(() => {
+    if (island && island.id !== lastIslandId) setLastIslandId(island.id);
+  }, [island, lastIslandId, setLastIslandId]);
+  const barIsland = island ?? state.islands.find((i) => i.id === lastIslandId) ?? state.islands[0];
   const current: View = view.kind === 'island' && !island ? { kind: 'empire' } : view;
 
   const addIsland = (region: number) => {
@@ -69,56 +76,59 @@ export default function App() {
 
   return (
     <div className="app">
-      <header className="topbar">
-        <h1>Anno 1800 Planner</h1>
-        <div className="topbar-actions">
-          <div className="segmented" role="radiogroup" aria-label="Theme">
-            {THEMES.map((t) => (
-              <button key={t} type="button" role="radio" aria-checked={theme === t} className={theme === t ? 'active' : ''} onClick={() => setTheme(t)}>
-                {t === 'system' ? 'Auto' : t === 'light' ? 'Light' : 'Dark'}
-              </button>
-            ))}
-          </div>
-          <label className="check" title="Hide needs an island has not unlocked yet by resident count">
-            <input
-              type="checkbox"
-              checked={state.settings.applyUnlocks}
-              onChange={(e) => dispatch({ type: 'setSettings', patch: { applyUnlocks: e.target.checked } })}
-            />
-            Apply need unlocks
-          </label>
-          <label className="check" title="The game's Revenue difficulty setting">
-            Revenue
-            <select
-              value={state.settings.revenue}
-              onChange={(e) => dispatch({ type: 'setSettings', patch: { revenue: e.target.value as Revenue } })}
-            >
-              {REVENUES.map((r) => (
-                <option key={r} value={r}>
-                  {REVENUE_LABEL[r]}
-                </option>
+      <div className="sticky-top">
+        <header className="topbar">
+          <h1>Anno 1800 Planner</h1>
+          <div className="topbar-actions">
+            <div className="segmented" role="radiogroup" aria-label="Theme">
+              {THEMES.map((t) => (
+                <button key={t} type="button" role="radio" aria-checked={theme === t} className={theme === t ? 'active' : ''} onClick={() => setTheme(t)}>
+                  {t === 'system' ? 'Auto' : t === 'light' ? 'Light' : 'Dark'}
+                </button>
               ))}
-            </select>
-          </label>
-          <button type="button" onClick={() => fileInput.current?.click()}>
-            Import JSON
-          </button>
-          <button type="button" className="primary" onClick={exportFile}>
-            Export JSON
-          </button>
-          <input
-            ref={fileInput}
-            type="file"
-            accept="application/json,.json"
-            hidden
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void importFile(f);
-              e.target.value = '';
-            }}
-          />
-        </div>
-      </header>
+            </div>
+            <label className="check" title="Hide needs an island has not unlocked yet by resident count">
+              <input
+                type="checkbox"
+                checked={state.settings.applyUnlocks}
+                onChange={(e) => dispatch({ type: 'setSettings', patch: { applyUnlocks: e.target.checked } })}
+              />
+              Apply need unlocks
+            </label>
+            <label className="check" title="The game's Revenue difficulty setting">
+              Revenue
+              <select
+                value={state.settings.revenue}
+                onChange={(e) => dispatch({ type: 'setSettings', patch: { revenue: e.target.value as Revenue } })}
+              >
+                {REVENUES.map((r) => (
+                  <option key={r} value={r}>
+                    {REVENUE_LABEL[r]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button type="button" onClick={() => fileInput.current?.click()}>
+              Import JSON
+            </button>
+            <button type="button" className="primary" onClick={exportFile}>
+              Export JSON
+            </button>
+            <input
+              ref={fileInput}
+              type="file"
+              accept="application/json,.json"
+              hidden
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void importFile(f);
+                e.target.value = '';
+              }}
+            />
+          </div>
+        </header>
+        {barIsland && <StatusBar island={barIsland} analysis={analysis} onOpen={() => setView({ kind: 'island', id: barIsland.id })} />}
+      </div>
       {notice && (
         <div className={`notice ${notice.tone}`} role="status">
           {notice.text}

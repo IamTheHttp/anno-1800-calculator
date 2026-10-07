@@ -38,6 +38,9 @@ Working conditions, items, electricity, and trade unions are not modelled.
 - **Need unlocks** — needs appear only once an island reaches the game's
   resident threshold (toggle in the top bar). Bonus needs (e.g. rum for
   workers) count only when ticked on the island.
+- **Status bar** — a sticky header row for the current (or last opened)
+  island: workforce surplus/deficit per tier, and the net t/min of steel
+  beams and windows on that island.
 - **Theme** — Auto (follows the OS), Light, or Dark, from the top bar.
 - **Import / export** — the whole plan as a versioned JSON file. The plan also
   autosaves to the browser's local storage.

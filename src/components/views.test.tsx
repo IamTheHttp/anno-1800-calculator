@@ -5,6 +5,7 @@ import { newIsland } from '../model/state';
 import { ChainView } from './ChainView';
 import { EmpireView } from './EmpireView';
 import { IslandView } from './IslandView';
+import { StatusBar } from './StatusBar';
 import { TradeView } from './TradeView';
 
 const settings = { applyUnlocks: true, revenue: 'medium' as const };
@@ -37,5 +38,14 @@ describe('views render', () => {
 
   it('chain view', () => {
     expect(renderToString(<ChainView />)).toContain('Totals');
+  });
+});
+
+describe('status bar', () => {
+  it('shows workforce and pinned construction goods', () => {
+    const html = renderToString(<StatusBar island={ow} analysis={analysis} onOpen={() => {}} />);
+    expect(html).toContain('Crown Falls');
+    expect(html).toContain('Steel Beams');
+    expect(html).toContain('Windows');
   });
 });

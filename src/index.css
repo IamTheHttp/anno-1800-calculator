@@ -969,3 +969,64 @@ button.link:hover {
   background: var(--accent);
   color: var(--accent-ink);
 }
+
+/* Sticky header + island status bar */
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px 18px;
+  flex-wrap: wrap;
+  padding: 6px 20px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.status-island {
+  font-size: 14px;
+}
+
+.status-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.status-label {
+  font-size: 11px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px 1px 4px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-chip.neg {
+  border-color: var(--neg);
+}
+
+@media (max-width: 760px) {
+  .status-bar {
+    padding: 6px 16px;
+  }
+}
